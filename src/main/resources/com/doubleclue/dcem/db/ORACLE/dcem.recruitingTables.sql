@@ -33,7 +33,7 @@ classification number(10,0),
 modified_by number(10,0),
 recommended_by number(10,0),
 recruiter_id number(10,0),
-candidate_status number(10,0),
+candidate_status number(10,0) not null,
 primary key (candidate_id)
 );
 
@@ -63,7 +63,7 @@ posted_on timestamp not null,
 dc_rating number(10,0) not null,
 dc_text long not null,
 candidate_id number(10,0) not null,
-candidate_status number(10,0),
+candidate_status number(10,0) not null,
 dc_user number(10,0) not null,
 primary key (feedback_id)
 );
@@ -195,7 +195,8 @@ primary key (dc_id)
 create table recruiting_vacancy_status (
 dc_id number(10,0) generated as identity,
 deprecated number(1,0) not null,
-not_for_head_ofs number(1,0) not null,
+locked_for_head_ofs number(1,0) not null,
+published number(1,0) not null,
 dc_rank number(10,0) not null,
 dc_status varchar2(128 char) not null,
 primary key (dc_id)

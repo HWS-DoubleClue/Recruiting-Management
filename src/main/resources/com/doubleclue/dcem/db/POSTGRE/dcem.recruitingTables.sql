@@ -33,7 +33,7 @@ classification int4,
 modified_by int4,
 recommended_by int4,
 recruiter_id int4,
-candidate_status int4,
+candidate_status int4 not null,
 primary key (candidate_id)
 );
 
@@ -63,7 +63,7 @@ posted_on timestamp not null,
 dc_rating int4 not null,
 dc_text varchar(4096) not null,
 candidate_id int4 not null,
-candidate_status int4,
+candidate_status int4 not null,
 dc_user int4 not null,
 primary key (feedback_id)
 );
@@ -195,7 +195,8 @@ primary key (dc_id)
 create table recruiting_vacancy_status (
 dc_id  serial not null,
 deprecated boolean not null,
-not_for_head_ofs boolean not null,
+locked_for_head_ofs boolean not null,
+published boolean not null,
 dc_rank int4 not null,
 dc_status varchar(128) not null,
 primary key (dc_id)

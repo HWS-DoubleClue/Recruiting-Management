@@ -33,7 +33,7 @@ classification integer,
 modified_by integer,
 recommended_by integer,
 recruiter_id integer,
-candidate_status integer,
+candidate_status integer not null,
 primary key (candidate_id)
 ) engine=InnoDB;
 
@@ -63,7 +63,7 @@ posted_on datetime not null,
 dc_rating integer not null,
 dc_text varchar(4096) not null,
 candidate_id integer not null,
-candidate_status integer,
+candidate_status integer not null,
 dc_user integer not null,
 primary key (feedback_id)
 ) engine=InnoDB;
@@ -195,7 +195,8 @@ primary key (dc_id)
 create table recruiting_vacancy_status (
 dc_id integer not null auto_increment,
 deprecated bit not null,
-not_for_head_ofs bit not null,
+locked_for_head_ofs bit not null,
+published bit not null,
 dc_rank integer not null,
 dc_status varchar(128) not null,
 primary key (dc_id)
