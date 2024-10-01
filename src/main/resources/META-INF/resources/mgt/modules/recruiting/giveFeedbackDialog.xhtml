@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:include src="/mgt/modules/dialogHead.xhtml" />
+
+<f:view locale="#{operatorSession.locale}">
+
+	<style>
+.wrap {
+	height: calc(100vh - 60px);
+	display: block;
+}
+
+.stylebutton.ui-button, .stylebutton.ui-button .ui-button-text {
+	background-color: transparent !important;
+	color: #005078 !important;
+	border-color: transparent !important;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: underline !important;
+	transition: background-color .2s, color .2s, border-color .2s,
+		box-shadow .2s, opacity .2s;
+}
+
+.stylebutton.ui-button:hover {
+	background-color: #94c8d5 !important;
+	color: #005078 !important;
+	border-color: #94c8d5 !important;
+}
+
+.noborder.ui-datatable .ui-widget-content {
+	border: none !important;
+}
+
+.nogridlines.ui-datatable .ui-datatable-data>tr>td {
+	border: 1px solid rgba(0, 0, 0, .08) !important;
+	border-width: 0 0 1px 0 !important;
+}
+
+.ui-selectonemenu {
+	width: 97% !important;
+}
+
+.ui-panel .ui-panel-content {
+	padding: 0 !important;
+}
+
+.ui-rating-star a {
+	user-select: none;
+}
+</style>
+
+	<h:body class="dialogBody">
+		<span id="customheader"> <h:outputLabel class="#{autoView.icon} dialogTitle" /> <h:outputLabel id="title"
+				value="#{RecruitingMsg['feedbackDialog.titlebar']} #{feedbackDialog.candidate.fullName}" styleClass="dialogTitle" style="display:inline-block; width:30vw;" />
+		</span>
+
+
+		<h:form id="addFeedbackForm">
+			<div class="wrap" style="overflow-y: auto;">
+				<div style="min-width: 740px; padding-right: 0.75rem;">
+
+					<p:messages showSummary="true" showDetail="false" closable="true">
+						<p:autoUpdate />
+					</p:messages>
+					<p:fieldset widgetVar="addFeedbackVar" id="addFeedback"
+						legend="#{feedbackDialog.newFeedback ? RecruitingMsg['feedbackDialog.addFeedback'] : RecruitingMsg['feedbackDialog.editFeedback']}" toggleable="true"
+						toggleSpeed="500" collapsed="true" style="margin-bottom:2rem;">
+						<h:panelGrid id="user-feedback" columns="2" columnClasses="ui-grid-col-4, ui-grid-col-8" cellpadding="4" cellspacing="6" width="100%"
+							style="padding:0.5rem;">
+							<p:outputLabel for="@next" value="#{RecruitingMsg['feedbackDialog.rating']}" />
+							<p:rating id="rating" value="#{feedbackDialog.operatorFeedback.rating}" required="true" />
+
+							<p:outputLabel for="@next" value="#{RecruitingMsg['feedbackDialog.candidateStatus']}" />
+							<p:selectOneMenu id="candidateStatus" value="#{feedbackDialog.selectedStatus}">
+								<f:selectItems value="#{feedbackDialog.candidateStatusList}" var="s" itemLabel="#{s.status}" itemValue="#{s.status}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel for="@next" value="#{RecruitingMsg['feedbackDialog.text']}" />
+							<p:inputTextarea id="text" value="#{feedbackDialog.operatorFeedback.text}" rows="6" style="width:100%;" required="true" />
+
+						</h:panelGrid>
+						<p:panel>
+							<p:commandButton value="Ok" update="@form" icon="pi pi-check" action="#{feedbackDialog.actionAddFeedback}" />
+							<p:commandButton value="#{CoreMsg['AUTO_ACTION.delete']}" icon="fa fa-trash" update="@form"
+								action="#{feedbackDialog.actionDeleteFeedback(feedbackDialog.operatorFeedback)}" rendered="#{feedbackDialog.newFeedback==false}" />
+							<p:commandButton value="#{RecruitingMsg['feedbackDialog.reset']}" icon="fa fa-rotate-left" update="user-feedback"
+								action="#{feedbackDialog.actionReset()}" rendered="#{feedbackDialog.newFeedback}" />
+						</p:panel>
+					</p:fieldset>
+
+					<p:dataTable id="feedbackTable" widgetVar="feedbackTable" value="#{feedbackDialog.feedbackList}" var="review" rowKey="#{review.id}"
+						emptyMessage="#{CoreMsg['emptyTable']}" styleClass="noborder nogridlines">
+						<p:column styleClass="ui-grid-col-2" headerText="#{RecruitingMsg['feedbackDialog.commenter']}" style="float:none;" sortBy="#{review.user.displayName}">
+							<h:outputText value="#{review.user.displayName}" />
+						</p:column>
+
+						<p:column styleClass="ui-grid-col-7" headerText="#{RecruitingMsg['feedbackDialog.text']}" style="float:none;" sortBy="#{review.postedOn}" sortOrder="desc">
+							<p:panel style="border:none;">
+								<small> <h:outputText value="#{RecruitingMsg['feedbackDialog.postedOn']} #{feedbackDialog.dateTimeFormatter(review.postedOn)}"
+										style="font-style:italic;" />
+								</small>
+								<br />
+								<h:outputText value="#{RecruitingMsg['feedbackDialog.subject']} - #{feedbackDialog.statusFormatter(review.candidateStatus)}"
+									style="font-weight:bold;" />
+								<br />
+								<h:outputText value="#{review.text}" />
+							</p:panel>
+						</p:column>
+
+						<p:column styleClass="ui-grid-col-2" headerText="#{RecruitingMsg['feedbackDialog.rating']}" style="float:none;" sortBy="#{review.rating}">
+							<p:rating value="#{review.rating}" readonly="true" />
+						</p:column>
+
+						<p:column styleClass="ui-grid-col-1" style="float:none;">
+							<p:commandButton icon="fa fa-trash" action="#{feedbackDialog.actionDeleteFeedback(review)}" update="@form" process="@this"
+								rendered="#{review.user == operatorSession.dcemUser || feedbackDialog.deletePermission ? true : false}" />
+						</p:column>
+					</p:dataTable>
+
+				</div>
+			</div>
+			<p:commandButton id="closeDialog" value="#{CoreMsg['close']}" icon="fa fa-close" immediate="true" action="#{viewNavigator.actionCloseDialog}" />
+		</h:form>
+
+	</h:body>
+</f:view>
+</html>

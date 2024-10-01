@@ -1,0 +1,258 @@
+<html>
+
+<style>
+@page {
+	size: A4 portrait;
+	margin: 12mm;
+	box-sizing: content-box;
+	font-family: "Segoe UI", sans-serif;
+	font-size: 10pt;
+	line-height: 1.12em;
+	
+	@bottom-left {
+   		content: element(footer-data);
+ 		}
+}
+	
+html, body {
+	box-sizing: content-box;
+	font-family: "Segoe UI", sans-serif;
+	font-size: 10pt;
+	line-height: 1.6rem;
+	width: 98%;
+	height: 842px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background-color: white;
+}
+
+header {
+	font-weight: bold;
+	background-color: #eaeaea;
+	width: 100%;
+	margin: 1rem 0;
+	height: 16%;
+	position: absolute;
+	top: 0;
+}
+
+.frame {
+	width: 18%;
+	height: 120%;
+	position: absolute;
+	top: -10%;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.nameheading {
+	width: 50%;
+	padding: 0 0.5rem;
+	font-size: x-large;
+	font-weight: bold;
+	float: left;
+	line-height: 2rem;
+	position: absolute;
+	top: 0;
+	left: 20%;
+}
+
+.statustable {
+	font-size: small;
+	font-weight: normal;
+	margin: 1.5rem 2rem;
+	float: right;
+	width: 22%;
+}
+
+table {
+	border: none;
+	border-spacing: 0;
+	table-layout: fixed;
+	width: 100%;
+	margin-left: 1rem;
+}
+
+.innercontainer {
+	margin: 0.5rem 1.5rem 0.5rem 1rem;
+	float: left;
+	width: 45%;
+}
+
+.heading {
+	width: 100%;
+	background-color: #eaeaea;
+	padding: 0.5rem;
+}
+
+.footer {
+	font-style: italic;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+}
+
+.pagefooter {
+	position: running(footer-data);
+}
+</style>
+
+<body>
+	<header>
+		<div class="frame" style="background-image: url('data:image/*;base64,${getPhotoData()}')"></div>
+		<h2 class="nameheading">
+			${getFormattedFullName()!?trim} <br> <small style="font-style: italic; font-size: large;">&emsp; ${jobTitle!'Bewerber/in'}</small>
+		</h2>
+
+		<table class="statustable">
+			<tr style="font-weight: bold;">
+				<td style="text-align: right;">Bewertung: ${ranking} / 5</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">${getFormattedStatus('de')!'Kein Status'}</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">${classifaction!'Nicht klassifiziert'}</td>
+			</tr>
+		</table>
+	</header>
+
+	<div style="width: 100%; position: absolute; top: 10%;">
+		<div style="width: 100%; float: left;">
+			<div style="width: 96.5%; margin: 0.5rem 1rem; margin-top: 6rem;">
+				<h4 class="heading">Beworben als:</h4>
+				<div style="padding: 0 1rem 1rem 2.5rem;">
+					<#foreach vacancy in vacancies>
+					<li># ${vacancy.id} - ${vacancy.defaultTitle}</li>
+					</#foreach>
+				</div>
+			</div>
+		</div>
+		<div style="width: 100%; float: left;">
+		    <div style="width: 96.5%; margin: 0.5rem 1rem; margin-top: 3em;">
+		       <h4 class="heading">Persönliche Daten:</h4>
+		    </div>
+		</div>
+		<div class="innercontainer">
+			<table>
+				<tr style="font-weight: bold;">
+					<td>E-Mail:</td>
+					<td>${getFormattedEmail()}</td>
+				</tr>
+				<tr style="font-weight: bold;">
+					<td>Telefon:</td>
+					<td>${getFormattedPhone()!'Keine Angabe'}</td>
+				</tr>
+				<tr>
+					<td>&emsp;</td>
+					<td>&emsp;</td>
+				</tr>
+				<tr>
+					<td>Geburtsdatum:</td>
+					<td>${getFormattedDateOfBirth('de')!'Keine Angabe'}</td>
+				</tr>
+				<tr>
+					<td>Geschlecht:</td>
+					<td>${getFormattedGender('de')}</td>
+				</tr>
+				<tr>
+					<td>Staatsangehörigkeit:</td>
+					<td>${getFormattedCitizenship('de')!'Keine Angabe'}</td>
+				</tr>
+				<tr>
+					<td>Straße / Nr.:</td>
+					<td>${getFormattedAdress()!'Keine Angabe'}</td>
+				</tr>
+				<tr>
+					<td>PLZ, Stadt:</td>
+					<td>${getFormattedZipAndCity()!'Keine Angabe'}</td>
+				</tr>
+				<tr>
+					<td>Bundesland:</td>
+					<td>${getFormattedCountryState()!'Keine Angabe'}</td>
+				</tr>
+				<tr>
+					<td>Land:</td>
+					<td>${getFormattedCountry('de')!'Keine Angabe'}</td>
+				</tr>
+			</table>
+		</div>
+		<div class="innercontainer">
+			<table>
+				<tr>
+					<td>Berufliche Qualifizierung:</td>
+					<td>${professionalQualification!'Keine Angabe'}</td>
+				</tr>
+				<tr>
+					<td>Höchster Abschluss:</td>
+					<td>${schoolGraduation!'Keine Angabe'}</td>
+				</tr>
+				<tr>
+					<td>Erfahrung:</td>
+					<td>${experience!'Keine Angabe'}</td>
+				</tr>
+				<tr>
+					<td>Frühester Beginn:</td>
+					<td>${getFormattedStartingOn('de')!'Keine Angabe'}</td>
+				</tr>
+				<tr>
+					<td>Kündigungsfrist:</td>
+					<td>${periodOfNotice!'Keine Angabe'}</td>
+				</tr>
+				<tr>
+					<td>Gehaltswunsch:</td>
+					<td>${getFormattedSalary('de')!'Keine Angabe'}</td>
+				</tr>
+				<tr>
+					<td>Recruiter:</td>
+					<td>${recruiter!'Keine Angabe'}</td>
+				</tr>
+				<tr>
+					<td>Empfohlen von:</td>
+					<td>${recommendedBy!'Keine Angabe'}</td>
+				</tr>
+			</table>
+		</div>
+		<#if skills?has_content>
+		<div style="width: 100%; float: left; margin-bottom: 3em;">
+			<div style="width: 96.5%; margin: 0.5rem 1rem;">
+				<h4 class="heading">Skills:</h4>
+				<div style="padding: 0 1rem 1rem 2.5rem;">
+					<#foreach skill in skills>
+					<div style="float: left; width: 48%;">
+						<div style="float: left; width: 50%;">
+							<li>${skill.skill.name}</li>
+						</div>
+						<div style="float: left; width: 50%;">${skill.level?capitalize}</div>
+					</div>
+					</#foreach>
+				</div>
+			</div>
+		</div>
+		</#if>
+		<div style="width: 100%; float: left; margin-bottom: 3em;">
+			<div style="width: 96.5%; margin: 0.5rem 1rem;">
+				<#if getFormattedRemarks()?has_content>
+				<h4 class="heading">Anmerkungen:</h4>
+				<div style="padding: 0 1rem 1rem 2.5rem;">
+					<td>${getFormattedRemarks()!}</td>
+				</div>
+				</#if>
+				<#if referral?has_content>
+				<h4 class="heading">Wie hat der Kandidat von uns erfahren:</h4>
+			    <div style="padding: 0 1rem 1rem 2.5rem;">
+					<td>${referral}</td>
+				</#if>
+			</div>
+		</div>
+		<div class="footer pagefooter">
+			<small>Zuletzt geändert: ${getLastModifiedOnFormatted('de')} von ${modifiedBy.displayName!'Administrator'}.</small>
+		</div>
+	</div>
+
+</body>
+</html>

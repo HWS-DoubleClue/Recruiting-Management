@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:include src="/mgt/modules/dialogHead.xhtml" />
+
+<f:view locale="#{operatorSession.locale}">
+
+<style>
+	.wrap {
+		height: calc(100vh - 60px);
+		display: block;
+	}
+	
+	.ui-selectonemenu {
+		width: 100% !important;
+	}
+	
+	/*
+	.noheader.ui-datatable thead {
+	 	display: none;
+	}
+	*/
+	
+	.ui-datatable.borderless tr.ui-datatable-even:hover, .ui-datatable.borderless tr.ui-datatable-odd:hover {
+		background: transparent;
+		cursor: default;
+	}
+	
+	.rowstyle {
+		border: 0;
+	}
+</style>
+
+	<h:body class="dialogBody">
+		<span id="customheader"> 
+			<h:outputLabel class="#{autoView.icon} dialogTitle" /> 
+			<h:outputLabel value="#{viewNavigator.dialogTitle}" styleClass="dialogTitle" />
+		</span>
+				
+		<div class="wrap" style="padding-right:1rem; overflow:auto;">	
+			<div style="min-width:740px">						
+			<p:messages showSummary="true" showDetail="false" closable="true">
+				<p:autoUpdate />
+			</p:messages>	
+			
+			<h:form id="historyForm">
+		        <p:dataTable id="historyTable" widgetVar="historyTable" value="#{historyDialog.historyList}" var="history" rowKey="#{history.id}"
+		        		emptyMessage="#{CoreMsg['emptyTable']}" styleClass="borderless" lazy="false" stickyHeader="true">	        			
+	        		<p:column headerText="#{RecruitingMsg['historyDialog.modifiedBy']}" styleClass="ui-grid-col-2">
+	        			<h:outputText value="#{history.modifiedBy}" />
+	        		</p:column>
+	        		
+	        		<p:column headerText="#{RecruitingMsg['historyDialog.timestamp']}" styleClass="ui-grid-col-2">
+	        			<h:outputText value="#{historyDialog.datetimeFormatter(history.timestamp)}" />
+		   		    </p:column>
+		   		    
+       				<p:column headerText="#{RecruitingMsg['historyDialog.operation']}" styleClass="ui-grid-col-1">
+    					<f:facet name="filter">
+		                    <p:selectOneMenu onchange="historyTable">
+		                        <f:selectItem itemLabel="#{CoreMsg['NotSpecified']}" itemValue="#{null}" noSelectionOption="true" />
+		                        <f:selectItems value="#{historyDialog.operationList}" />
+		                    </p:selectOneMenu>
+		                </f:facet>	
+		                <div style="display:flex; justify-content:center; width:100%;">		   		        		
+	   		        		<h:outputText value="#{historyDialog.languageFormatter(history.operation)}" />
+	   		        	</div>      
+ 		        	</p:column>	
+
+       				<p:column headerText="#{RecruitingMsg['historyDialog.history']}" styleClass="ui-grid-col-7">
+       					<h:outputText value="#{history.information}" />
+ 		        	</p:column>			              		   		
+		        </p:dataTable>
+		     
+				<p:panel style="border:0; display:flex; justify-content:center; margin-bottom:0.5rem; padding-top:0.5rem; position:absolute; bottom:0; width:100%;">
+					<p:commandButton id="closeDialog" value="#{CoreMsg['close']}" icon="fa fa-close" style="width:8em;" immediate="true" action="#{viewNavigator.actionCloseDialog}" />
+				</p:panel>
+			</h:form>	
+			</div>
+		</div>
+		
+	</h:body>
+</f:view>
+</html>

@@ -1,0 +1,132 @@
+@CHARSET "ISO-8859-1";
+
+.recruiting-dialog-wrap {
+	height: calc(100vh - 6em);
+	display: block;
+	padding-right: 0.5rem;
+	overflow-y: auto;
+	margin-bottom: 1em;
+}
+
+.recruiting-grid * {
+	box-sizing: border-box;
+}
+
+#loading-dialog .ui-dialog-content {
+	padding: .5em 1em !important;
+}
+
+.recruiting-vacancy-texteditor.ui-texteditor .ql-container .ql-editor {
+	min-height: calc(65vh - 11em);
+}
+
+.recruiting-text-editor.ui-texteditor .ql-container .ql-editor {
+	min-height: calc(75vh - 11em);
+}
+
+.uploadbutton .ui-fileupload-buttonbar {
+	padding: unset
+}
+
+.w-100, #tabform\:tabs\:recommended-by\:autouser,
+	#tabform\:tabs\:recommended-by\:autouser_input,
+	#tabform\:tabs\:dateOfBirth, #tabform\:tabs\:dateOfBirth_input,
+	#tabform\:tabs\:decisionMaker\:autouser,
+	#tabform\:tabs\:decisionMaker\:autouser_input,
+	#tabform\:tabs\:clerk\:autouser, #tabform\:tabs\:clerk\:autouser_input,
+	.recruiting-datepicker.p-datepicker, .recruiting-autocomplete-multiple.ui-autocomplete,
+	.recruiting-autocomplete-multiple .ui-autocomplete-multiple-container,
+	.recruiting-autocomplete.ui-autocomplete, .recruiting-autocomplete .ui-autocomplete-input
+	{
+	width: 100%;
+}
+
+.recruiting-select-one, .recruiting-select-checkbox-menu {
+	min-width: 100%;
+	max-width: 100%;
+}
+
+.recruiting-select-two {
+	min-width: 40%;
+	max-width: 40%;
+}
+
+.recruiting-select-one.ui-selectonemenu .ui-selectonemenu-trigger .ui-icon
+	{
+	margin: auto 3px auto auto;
+}
+
+.recruiting-select-checkbox-menu.ui-selectcheckboxmenu .ui-selectcheckboxmenu-trigger
+	{
+	width: auto;
+	border-left-width: 0px;
+}
+
+.recruiting-select-checkbox-menu .ui-selectcheckboxmenu-token {
+	white-space: unset;
+}
+
+.w-20, .recruiting-zip {
+	width: 20%;
+}
+
+.recruiting-city {
+	width: calc(80% - 1em);
+}
+
+.w-12 {
+	width: 12%;
+}
+
+.w-38 {
+	width: 38%;
+}
+
+.w-25 {
+	width: 25%;
+}
+
+.w-75 {
+	width: 75%;
+}
+
+.w-30 {
+	width: 30%;
+}
+
+.w-70 {
+	width: 70%;
+}
+
+.w-40 {
+	width: 40%;
+}
+
+.margin-left-label {
+	margin-left: 1em;
+}
+
+.recruiting-preview-dialog {
+	width: 95% !important;
+	height: 100% !important;
+}
+
+.recruiting-preview-content {
+	display: flex;
+	justify-content: center;
+	overflow-y: scroll;
+	max-height: calc(100vh - 120px);
+	display: block;
+}
+
+.full-screen-pdf {
+	width: 100%;
+	height: calc(100vh - 120px);
+}
+
+.full-screen-image {
+	max-width: calc(100% - 16px);
+	height: 100%;
+	border: 1px solid #ccc;
+	padding: 2px
+}

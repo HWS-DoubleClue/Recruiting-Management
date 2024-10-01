@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" xmlns:p="http://primefaces.org/ui"
+	xmlns:dc="http://java.sun.com/jsf/composite/dcemComponents">
+
+<ui:include src="/mgt/modules/dialogHead.xhtml" />
+
+<f:view locale="#{operatorSession.locale}">
+
+	<h:body styleClass="dialogBody">
+		<span id="customheader"> <h:outputLabel class="#{autoView.icon} dialogTitle" /> <h:outputLabel value="#{viewNavigator.dialogTitle}"
+				styleClass="dialogTitle" />
+		</span>
+		<h:form id="tabform" enctype="multipart/form-data">
+			<div class="recruiting-dialog-wrap">
+				<p:messages showSummary="true" showDetail="false" closable="true">
+					<p:autoUpdate />
+				</p:messages>
+
+				<h:outputText id="lid" value="#{RecruitingMsg['vacancyDialog.vacancyNo']} #{vacancyDialog.vacancyEntity.id}" style="font-size:large; font-weight:bold;"
+					rendered="#{empty vacancyDialog.vacancyEntity.id ? false : true}" />
+				<p:tabView id="tabs">
+					<p:tab title="#{RecruitingMsg['vacancyDialog.general']}">
+						<h:panelGrid columns="4" cellpadding="4" cellspacing="4" width="100%" columnClasses="w-12, w-38, w-12, w-38" styleClass="recruiting-grid">
+							<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.prio']}" />
+							<p:selectOneMenu id="prio" value="#{vacancyDialog.selectedPriority}" autoWidth="false" styleClass="recruiting-select-one">
+								<f:selectItems value="#{vacancyDialog.priorities}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.status']}" styleClass="margin-left-label" />
+							<p:selectOneMenu id="status" value="#{vacancyDialog.selectedStatus}" autoWidth="false" styleClass="recruiting-select-one">
+								<f:selectItems value="#{vacancyDialog.statusListAsSelectItem}" var="s" itemLabel="#{s.label}" itemValue="#{s.value}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.department']}" />
+							<p:autoComplete id="department" value="#{vacancyDialog.selectedDepartment}" completeMethod="#{vacancyDialog.completeDepartment}" effect="fade"
+								dropdown="true" styleClass="recruiting-autocomplete" forceSelection="true" />
+
+							<p:outputLabel for="career-levels" value="#{RecruitingMsg['CareerLevelEntity.careerLevels']}" styleClass="margin-left-label" />
+							<p:selectCheckboxMenu id="career-levels" filter="true" filterMatchMode="contains" multiple="true" panelStyle="width: 30rem" scrollHeight="250"
+								value="#{vacancyDialog.selectedCareerLevelIds}" styleClass="recruiting-select-checkbox-menu">
+								<f:selectItems value="#{vacancyDialog.careerLevelsAsSelectItem}" var="career" itemLabel="#{career.label}" itemValue="#{career.value}" />
+							</p:selectCheckboxMenu>
+						</h:panelGrid>
+						<hr style="border: 1px solid #c3c3c3;" />
+						<p:tabView id="languages" focusOnLastActiveTab="true" value="#{vacancyDialog.vacancyLanguages}" var="lang" style="width:100%;">
+							<f:facet name="actions">
+								<p:commandLink id="addLanguage" oncomplete="PF('addDialog').show();" immediate="true" process="@this" partialSubmit="true" update="addForm:addLang"
+									disabled="#{empty vacancyDialog.languages ? true : false}">
+									<h:outputText class="fa fa-plus" />
+									<h:outputText value="#{RecruitingMsg['vacancyDialog.addLanguage']}" style="margin-left:1em" />
+								</p:commandLink>
+							</f:facet>
+							<p:tab title="#{vacancyDialog.getLocalizedLanguage(lang.language.name())}">
+								<div style="display: flex; justify-content: space-between;">
+									<div>
+										<p:outputLabel for="title" value="#{RecruitingMsg['vacancyDialog.title']}" />
+										<p:inputText id="title" value="#{lang.title}" style="margin-left:1em" maxlength="511" size="70" required="true">
+											<p:ajax event="change" partialSubmit="true" process="@this" immediate="true"></p:ajax>
+										</p:inputText>
+									</div>
+									<h:panelGroup style="align-items: center; display:flex">
+										<p:outputLabel for="toggle-default-lang" value="#{RecruitingMsg['vacancyDialog.setDefault']}" />
+										<p:toggleSwitch id="toggle-default-lang" value="#{lang.defaultLanguage}" style="margin-left:1em;" disabled="#{lang.defaultLanguage}">
+											<p:ajax event="change" partialSubmit="true" process="@this" listener="#{vacancyDialog.actionMakeDefault(lang)}" update="languages" />
+										</p:toggleSwitch>
+
+										<p:commandLink action="#{vacancyDialog.actionPrepareDeleteLanguage(lang)}" oncomplete="PF('deleteDialog').show();" immediate="true"
+											style="margin-left:3em" disabled="#{lang.defaultLanguage}">
+											<h:outputText class="fa fa-trash" />
+											<h:outputText value=" #{RecruitingMsg['AUTO_ACTION.delete']}" />
+										</p:commandLink>
+									</h:panelGroup>
+								</div>
+								<p:textEditor id="description" styleClass="recruiting-vacancy-texteditor" value="#{lang.description}" required="true"
+									placeholder="#{RecruitingMsg['vacancyDialog.desc']} *" style="margin-top:1em;">
+									<p:ajax event="change" partialSubmit="true"></p:ajax>
+								</p:textEditor>
+							</p:tab>
+						</p:tabView>
+					</p:tab>
+
+					<p:tab title="#{RecruitingMsg['vacancyDialog.options']}">
+						<h:panelGrid columns="2" style="margin-top:1em;">
+							<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.replacement']}" style="Vertical-align: center" />
+							<p:toggleSwitch id="replace" value="#{vacancyDialog.vacancyEntity.replacement}" required="false" />
+						</h:panelGrid>
+						<p:fieldset legend="#{RecruitingMsg['vacancyDialog.internalInformations']}" style="margin:1em 0em 2em 0em">
+							<h:panelGrid columns="4" cellpadding="4" cellspacing="4" width="100%" columnClasses="w-12, w-38, w-12, w-38" styleClass="recruiting-grid">
+								<p:outputLabel for="decisionMaker" value="#{RecruitingMsg['Vacancy.decisionMaker']}" />
+								<dc:autoCompleteUser id="decisionMaker" userValue="#{vacancyDialog.decisionMaker}" required="false"
+									userListener="#{vacancyDialog.decisionMakerListener()}" />
+
+								<p:outputLabel for="clerk" value="#{RecruitingMsg['Vacancy.clerk']}:" styleClass="margin-left-label" />
+								<dc:autoCompleteUser id="clerk" userValue="#{vacancyDialog.clerk}" required="false" userListener="#{vacancyDialog.clerkListener()}" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.type']}" />
+								<p:selectOneMenu id="type" value="#{vacancyDialog.selectedType}" autoWidth="false" styleClass="recruiting-select-one">
+									<f:selectItems value="#{vacancyDialog.types}" />
+								</p:selectOneMenu>
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.classification']}" styleClass="margin-left-label" />
+								<p:selectOneMenu id="classification" value="#{vacancyDialog.selectedClassification}" autoWidth="false" styleClass="recruiting-select-one">
+									<f:selectItem itemLabel="#{CoreMsg['NotSpecified']}" itemValue="" />
+									<f:selectItems value="#{vacancyDialog.classificationsList}" var="c" itemLabel="#{c.name}" itemValue="#{c.name}" />
+								</p:selectOneMenu>
+
+								<p:outputLabel for="branch-locations" value="#{RecruitingMsg['Vacancy.branchLocations']}" />
+								<p:selectCheckboxMenu id="branch-locations" filter="true" filterMatchMode="contains" multiple="true" panelStyle="width: 30rem" scrollHeight="250"
+									value="#{vacancyDialog.selectedBranchLocationIds}" styleClass="recruiting-select-checkbox-menu">
+									<f:selectItems value="#{vacancyDialog.branchLocationsAsSelectItem}" var="branch" itemLabel="#{branch.label}" itemValue="#{branch.value}" />
+								</p:selectCheckboxMenu>
+
+							</h:panelGrid>
+						</p:fieldset>
+						<p:fieldset legend="#{RecruitingMsg['vacancyDialog.contractDetails']}" style="margin:1em 0em 2em 0em">
+							<h:panelGrid columns="4" cellpadding="4" cellspacing="4" columnClasses="w-20, w-30, w-20, w-30" width="100%" styleClass="recruiting-grid">
+								<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.starting']}" />
+								<p:datePicker id="starting" value="#{vacancyDialog.vacancyEntity.startingFrom}" required="true" locale="#{operatorSession.locale}"
+									pattern="#{operatorSession.datePattern}" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" styleClass="recruiting-datepicker" inputStyleClass="w-40" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['Vacancy.applicationDeadline']}" styleClass="margin-left-label" />
+								<p:datePicker id="application-deadline" value="#{vacancyDialog.vacancyEntity.applicationDeadline}" locale="#{operatorSession.locale}"
+									pattern="#{operatorSession.datePattern}" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" styleClass="recruiting-datepicker" inputStyleClass="w-40" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.hoursPerWeek']}" />
+								<p:inputNumber id="hpw" minValue="0" maxValue="168" value="#{vacancyDialog.vacancyEntity.hoursPerWeek}" inputStyleClass="w-40" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.currency']}" styleClass="margin-left-label" />
+								<p:selectOneMenu id="currency" value="#{vacancyDialog.currency}" autoWidth="false" styleClass="recruiting-select-two" >
+									<f:selectItems value="#{vacancyDialog.availableCurrencies}" />
+								</p:selectOneMenu>
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.salaryTarget']}" />
+								<p:inputNumber id="salaryTarget" minValue="0" maxValue="2147483647" value="#{vacancyDialog.vacancyEntity.salaryTarget}" decimalPlaces="0"
+									inputStyleClass="w-40" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.salaryMax']}" styleClass="margin-left-label" />
+								<p:inputNumber id="salaryMax" minValue="0" maxValue="2147483647" value="#{vacancyDialog.vacancyEntity.salaryMax}" decimalPlaces="0"
+									inputStyleClass="w-40" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.remotePercent']}" />
+								<p:inputNumber id="remotePercent" minValue="0" maxValue="100" value="#{vacancyDialog.vacancyEntity.remotePercent}" inputStyleClass="w-40" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.onboardingRemotePercent']}" styleClass="margin-left-label" />
+								<p:inputNumber id="onboardingRemotePercent" minValue="0" maxValue="100" value="#{vacancyDialog.vacancyEntity.onboardingRemotePercent}"
+									inputStyleClass="w-40" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.probationTime']}" />
+								<p:inputNumber id="probationTime" minValue="0" maxValue="2147483647" value="#{vacancyDialog.vacancyEntity.probationTime}" inputStyleClass="w-40" />
+							</h:panelGrid>
+						</p:fieldset>
+					</p:tab>
+
+					<p:tab title="#{RecruitingMsg['vacancyDialog.skills']}" id="skillsTab">
+						<ui:include src="/mgt/modules/skills/SkillTree.xhtml">
+							<ui:param name="skillTableId" value="skillTable" />
+						</ui:include>
+						<p:spacer />
+					</p:tab>
+
+					<p:tab title="#{RecruitingMsg['watchers']}" id="watchersTab">
+						<p:spacer />
+						<p:commandLink immediate="true" action="#{vacancyDialog.actionPreAddWatcher()}" oncomplete="PF('watcherDialog').show();">
+							<h:outputText class="fa fa-plus" />
+							<h:outputText value="#{RecruitingMsg['vacancyDialog.add']}" />
+						</p:commandLink>
+						<p:dataTable id="watchersTable" var="watcher" value="#{vacancyDialog.watchers}" scrollable="false" rowKey="#{watcher.id}" scrollHeight="300"
+							emptyMessage="#{CoreMsg['emptyTable']}" styleClass="table-sticky-head" style="margin-top:1em">
+
+							<p:column style="text-align:center; width:37px">
+								<p:avatar shape="circle">
+									<p:graphicImage value="#{vacancyDialog.getUserPhoto(watcher)}" stream="false" />
+								</p:avatar>
+							</p:column>
+
+							<p:column filterBy="#{watcher.displayName}" headerText="#{RecruitingMsg['watchers.watcher']}" filterMatchMode="contains" sortBy="#{watcher.displayName}">
+								<h:outputText value="#{watcher.displayName}" />
+							</p:column>
+
+							<p:column filterBy="#{watcher.jobTitle}" headerText="#{RecruitingMsg['watchers.jobTitle']}" filterMatchMode="contains">
+								<h:outputText value="#{watcher.jobTitle}" />
+							</p:column>
+
+							<p:column filterBy="#{watcher.departmentName}" headerText="#{RecruitingMsg['watchers.department']}" filterMatchMode="contains">
+								<h:outputText value="#{watcher.departmentName}" />
+							</p:column>
+
+							<p:column filterBy="#{watcher.email}" headerText="#{RecruitingMsg['watchers.email']}" filterMatchMode="contains">
+								<h:outputText value="#{watcher.email}" />
+							</p:column>
+
+							<p:column style="text-align:center; width:37px">
+								<p:commandButton id="removeWatcher" icon="fa fa-trash-can" ajax="true" action="#{vacancyDialog.actionRemoveWatcher(watcher)}" partialSubmit="true"
+									process="@this" update="watchersTable" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+
+					<p:tab title="#{RecruitingMsg['vacancyDialog.remarks']}" id="remarkTab">
+						<p:textEditor id="remark" styleClass="recruiting-text-editor" value="#{vacancyDialog.vacancyEntity.remarks}" height="400" style="margin-top:1em" />
+					</p:tab>
+				</p:tabView>
+			</div>
+			<p:commandButton value="Ok" styleClass="dialog-button" icon="pi pi-check" action="#{autoDialog.actionOk}" update="@form" />
+			<p:spacer width="20" />
+			<p:commandButton id="closeDialog" value="#{CoreMsg['cancel']}" icon="fa fa-close" styleClass="dialog-button" immediate="true"
+				action="#{viewNavigator.actionCloseDialog}" />
+		</h:form>
+
+		<h:form id="addForm">
+			<p:dialog widgetVar="addDialog" modal="true" header="#{RecruitingMsg['vacancyDialog.addLanguage']}" resizable="false">
+				<div style="height: 140px; padding-right: 1rem; width: 400px">
+					<h:panelGrid columns="2" cellpadding="10">
+						<h:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.selectLanguage']}" />
+						<p:selectOneMenu id="addLang" value="#{vacancyDialog.selectedLanguage}">
+							<f:selectItems value="#{vacancyDialog.languages}" var="l" itemLabel="#{l.label}" itemValue="#{l.value}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<p:commandButton value="OK" update="tabform:tabs:languages" style="margin-top: 2em; width:8em" icon="pi pi-check"
+						action="#{vacancyDialog.actionAddLanguage()}" oncomplete="PF('addDialog').hide();" />
+					<p:commandButton value="#{CoreMsg['close']}" icon="fa fa-close" style="margin:0.5rem 1rem; width:8em" immediate="true" onclick="PF('addDialog').hide();" />
+				</div>
+			</p:dialog>
+		</h:form>
+
+		<h:form id="deleteForm">
+			<p:dialog widgetVar="deleteDialog" modal="true" header="#{RecruitingMsg['vacancyDialog.deleteLanguage']}" resizable="false">
+				<div style="height: 120px; padding-right: 1rem;">
+					<h:outputText value="#{RecruitingMsg['vacancyDialog.confirmDelete']}" />
+					<br></br> <br></br>
+					<p:commandButton value="OK" update="tabform:tabs:languages" style="margin:0.5rem 1rem; width:8em" icon="pi pi-check"
+						action="#{vacancyDialog.actionDeleteLanguage()}" oncomplete="PF('deleteDialog').hide();" />
+					<p:commandButton value="#{CoreMsg['close']}" icon="fa fa-close" style="margin:0.5rem 1rem; width:8em" immediate="true" onclick="PF('deleteDialog').hide();" />
+				</div>
+			</p:dialog>
+		</h:form>
+
+
+		<h:form id="watcherDialogForm">
+			<p:dialog widgetVar="watcherDialog" modal="true" header="#{RecruitingMsg['watchers.addWatcher']}" dynamic="true" cache="false" resizable="false">
+				<div style="height: 150px; padding-right: 1rem;">
+					<h:panelGrid id="new-watcher-grid" columns="3" cellpadding="4">
+						<p:outputLabel for="autoUser" value="#{RecruitingMsg['watchers.watcher']}: " />
+
+						<p:avatar id="new-watcher-photo" dynamicColor="true" size="large" shape="circle" style="margin-left: 0.4em;">
+							<p:graphicImage value="#{vacancyDialog.getUserPhoto(vacancyDialog.newWatcher)}" stream="false" />
+						</p:avatar>
+
+						<dc:autoCompleteUser id="autoUser" userValue="#{vacancyDialog.newWatcher}" required="true" userListener="#{vacancyDialog.watcherListener()}"
+							updateComponents="watcherDialogForm:new-watcher-grid" />
+					</h:panelGrid>
+
+					<p:commandButton value="#{RecruitingMsg['vacancyDialog.add']}" update="tabform:tabs:watchersTable" style="margin:0.5rem 1rem; width:8em" icon="pi pi-check"
+						action="#{vacancyDialog.actionAddWatcher}" oncomplete="PF('watcherDialog').hide();" />
+					<p:commandButton value="#{CoreMsg['close']}" icon="fa fa-close" style="margin:0.5rem 1rem; width:8em" immediate="true"
+						onclick="PF('watcherDialog').hide();" />
+				</div>
+			</p:dialog>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

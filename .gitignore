@@ -1,0 +1,12 @@
+**/bin/
+**/testbin/
+**/target/
+**/testLogs/
+**/.settings/
+**/work/
+/.apt_generated/
+/.apt_generated_tests/
+/.factorypath
+.factorypath
+.classpath
+.project

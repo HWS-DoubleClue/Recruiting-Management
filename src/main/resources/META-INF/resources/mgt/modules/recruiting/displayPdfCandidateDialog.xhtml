@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:include src="/mgt/modules/dialogHead.xhtml" />
+
+<f:view locale="#{operatorSession.locale}">
+
+	<h:body class="dialogBody">
+		<h:form id="showDialog">
+			<div class="recruiting-dialog-wrap">
+				<p:messages showSummary="true" showDetail="false" closable="true">
+					<p:autoUpdate />
+				</p:messages>
+				<p:fieldset style="margin-bottom:1rem;">
+					<p:commandButton id="export" icon="fa fa-file-pdf" value="#{RecruitingMsg['showVacancyDialog.exportPdf']}" immediate="true" ajax="false"
+						action="#{displayCandidateDialog.actionExportPdf}" />
+
+					<p:commandButton id="exportAll" icon="fa fa-solid fa-file-pdf" value="#{RecruitingMsg['displayCandidateDialog.exportPdfWithDocs']}" immediate="true"
+						ajax="false" action="#{displayCandidateDialog.actionExportPdfWithDocs}" style="margin-left: 3em;" />
+
+					<p:commandButton id="exportZip" icon="fa fa-file-zipper" value="#{RecruitingMsg['displayCandidateDialog.exportZip']}" immediate="true" ajax="false"
+						action="#{displayCandidateDialog.actionExportZip}" style="margin-left: 3em;" />
+				</p:fieldset>
+
+				<iframe id="htmldata" frameborder="0" scrolling="yes" srcdoc="#{displayCandidateDialog.htmlData}" style="width: 100%; height: 70vh;">
+					<p>#{RecruitingMsg['display.error']}</p>
+				</iframe>
+			</div>
+			<p:commandButton id="closeDialog" value="#{CoreMsg['close']}" icon="fa fa-close" styleClass="dialog-button" immediate="true"
+				action="#{viewNavigator.actionCloseDialog}" />
+		</h:form>
+	</h:body>
+</f:view>
+</html>

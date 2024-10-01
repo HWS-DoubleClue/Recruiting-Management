@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vacancy EN</title>
+<style>
+@page {
+	size: A4 portrait;
+	margin: 10mm;
+	box-sizing: border-box;
+	font-family: "Segoe UI", sans-serif;
+	font-size: 10pt;
+	@bottom-left {
+    	content: element(footer-data);
+	}
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 10pt;
+	background-color: #ffffff;
+}
+
+body {
+	box-sizing: border-box;
+	margin: 12mm;
+}
+
+ul {
+	list-style-position: outside;
+}
+
+footer {
+	font-style: italic;
+	font-size: 8pt;
+	width: 100%;
+	margin-top: 16px;
+}
+
+.footer {
+	position: running(footer-data);
+}
+
+.underline {
+	text-decoration: underline;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.container {
+	width: 100%;
+	overflow: hidden;
+}
+
+.item {
+	padding: 0 20px;
+	float: left;
+	width: 25%;
+	/* Four columns, each 25% width */
+	box-sizing: border-box;
+	margin-top: 4px;
+}
+
+.item-full-width {
+	width: 100%;
+	clear: both;
+}
+
+.item-half-width {
+	padding: 0 20px;
+	width: 50%;
+	float: left;
+	box-sizing: border-box;
+	margin-top: 4px;
+}
+
+.title {
+	background-color: #eaeaea;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	clear: both;
+	width: 100%;
+	margin-top: 16px;
+	margin-bottom: 12px;
+}
+
+.mb-8 {
+	margin-bottom: 8px;
+}
+</style>
+</head>
+
+<body>
+
+	<div id="container" class="container">
+
+		<div class="item title item-full-width">
+			<h2>VACANCY: ${id}</h2>
+			<h1>${getFormattedTitle('en')}</h1>
+		</div>
+
+		<div class="item title item-full-width">
+			<h3>General</h3>
+		</div>
+
+		<div class="item bold">Priority:</div>
+		<div class="item">${getFormattedPriority('en')}</div>
+
+		<div class="item bold">Status:</div>
+		<div class="item">${getFormattedStatus('en')}</div>
+
+		<#if department?has_content>
+		<div class="item bold">Department:</div>
+		<div class="item">${department.name}</div>
+		</#if>
+
+		<#if careerLevels?has_content>
+		<div class="item bold">Career Level:</div>
+		<div class="item">
+			<ul>
+				<#foreach careerLevel in careerLevels>
+				<li>${careerLevel.getLocalizedCareerLevel('en')}</li>
+				</#foreach>
+			</ul>
+		</div>
+		</#if>
+
+		<div class="item bold item-full-width">Description:</div>
+		<div class="item item-full-width">${getFormattedDescription('en')}</div>
+
+		<div class="item title item-full-width">
+			<h3>Options</h3>
+		</div>
+
+		<div class="item bold">Replacement:</div>
+		<div class="item">
+			<#if replacement==true>Yes<#else>No</#if>
+		</div>
+
+		<#if decisionMaker?has_content>
+		<div class="item bold">Decision Maker:</div>
+		<div class="item">${decisionMaker.displayName}</div>
+		</#if>
+
+		<#if clerk?has_content>
+		<div class="item bold">Clerk:</div>
+		<div class="item">${clerk.displayName}</div>
+		</#if>
+
+		<div class="item bold">Type:</div>
+		<div class="item">${type}</div>
+
+		<#if classification?has_content>
+		<div class="item bold">Classification:</div>
+		<div class="item">${classification}</div>
+		</#if>
+
+		<#if branchLocation?has_content>
+		<div class="item bold">Branch Locations:</div>
+		<div class="item">
+			<ul>
+				<#foreach branchLocation in branchLocations>
+				<li>${branchLocation.city} [${branchLocation.country}]</li>
+				</#foreach>
+			</ul>
+		</div>
+		</#if>
+
+		<#if getFormattedStartingFrom('en')?has_content>
+		<div class="item bold">Starting from:</div>
+		<div class="item">${getFormattedStartingFrom('en')}</div>
+		</#if>
+
+		<#if getFormattedApplicationDeadline('en')?has_content>
+		<div class="item bold">Application Deadline:</div>
+		<div class="item">${getFormattedApplicationDeadline('en')}</div>
+		</#if>
+
+		<#if hoursPerWeek?has_content>
+		<div class="item bold">Hours per Week:</div>
+		<div class="item">${hoursPerWeek}</div>
+		</#if>
+
+		<#if getFormattedSalary('en')?has_content>
+		<div class="item bold">Salary Target / Max.:</div>
+		<div class="item">${getFormattedSalary('en')}</div>
+		</#if>
+
+		<#if getFormattedRemote()?has_content>
+		<div class="item bold">Remote (during onboarding):</div>
+		<div class="item">${getFormattedRemote()}</div>
+		</#if>
+
+		<#if probationTime?has_content>
+		<div class="item bold">Probation Time (Months):</div>
+		<div class="item">${probationTime}</div>
+		</#if>
+
+		<#if skills?has_content>
+		<div class="item title item-full-width">
+			<h3>Skills</h3>
+		</div>
+
+		<div class="item bold mb-8">Required Skills:</div>
+		<div class="item mb-8">
+			<ul>
+				<#foreach skill in getSkillsRequired()>
+				<li>${skill.skill.name} [${skill.level.getLocaleText('en')}]</li>
+				</#foreach>
+			</ul>
+		</div>
+
+		<div class="item bold">Nice-to-Have Skills:</div>
+		<div class="item">
+			<ul>
+				<#foreach skill in getSkillsNiceToHave()>
+				<li>${skill.skill.name} [${skill.level.getLocaleText('en')}]</li>
+				</#foreach>
+			</ul>
+		</div>
+		</#if>
+
+		<#if getFormattedRemarks()?has_content>
+		<div class="item title item-full-width">
+			<h3>Remarks</h3>
+		</div>
+		<div class="item item-full-width">${getFormattedRemarks()}</div>
+		</#if>
+
+	</div>
+
+	<footer class="footer"> 
+		Last Changed: ${getLastModifiedOnFormatted('en')} by ${modifiedBy.displayName!'Administration'}.
+	</footer>
+</body>
+
+</html>

@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" xmlns:p="http://primefaces.org/ui"
+	xmlns:dc="http://java.sun.com/jsf/composite/dcemComponents">
+
+<ui:include src="/mgt/modules/dialogHead.xhtml" />
+
+<f:view locale="#{operatorSession.locale}">
+
+<style>
+.ui-fileupload-files {
+	display: none;
+}
+</style>
+
+	<h:body styleClass="dialogBody">
+		<span id="customheader"> <h:outputLabel class="#{autoView.icon} dialogTitle" /> <h:outputLabel value="#{viewNavigator.dialogTitle}"
+				styleClass="dialogTitle" />
+		</span>
+
+		<h:form id="tabform" enctype="multipart/form-data">
+			<div class="recruiting-dialog-wrap" style="padding-right: 0.5rem; overflow-y: auto;">
+				<p:messages showSummary="true" showDetail="false" closable="true">
+					<p:autoUpdate />
+				</p:messages>
+
+				<p:tabView id="tabs">
+					<p:tab title="#{RecruitingMsg['vacancyDialog.general']}">
+						<h:outputText value="#{RecruitingMsg['candidateDialog.candidateID']} #{candidateDialog.candidateEntity.id} - #{candidateDialog.candidateEntity.fullName}"
+							style="font-size:large; font-weight:bold; width:100%;" rendered="#{candidateDialog.candidateEntity.id != null ? true : false}" />
+						<div style="display: flex; width: 100%; margin-top: 1em">
+							<div style="display: inline-grid; width: fit-content;">
+								<p:graphicImage id="candidatePhoto" styleClass="imageProfileUser" cache="false" value="#{candidateDialog.candidatePhoto}" />
+								<p:fileUpload listener="#{candidateDialog.handlePhotoUpload}" mode="advanced" dragDropSupport="true" sizeLimit="5000000" multiple="false"
+									allowTypes="/(\.|\/)(jpe?g|png)$/" update="candidatePhoto" auto="true" invalidSizeMessage="#{RecruitingMsg['candidateDialog.error.fileTooLarge']}"
+									label="#{RecruitingMsg['candidateDialog.photoUpload']}" styleClass="uploadbutton uploadbuttontext">
+								</p:fileUpload>
+							</div>
+
+							<h:panelGrid columns="4" cellpadding="5" cellspacing="2" columnClasses="w-12, w-38, w-12, w-38" width="100%"
+								styleClass="margin-left-label recruiting-grid">
+								<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.firstName']}" />
+								<p:inputText id="firstName" value="#{candidateDialog.candidateEntity.firstName}" required="true" maxlength="255" styleClass="w-100" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.surname']}" styleClass="margin-left-label" />
+								<p:inputText id="surname" value="#{candidateDialog.candidateEntity.surname}" required="true" maxlength="255" styleClass="w-100" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.title']}" />
+								<p:inputText id="jobTitle" value="#{candidateDialog.candidateEntity.title}" maxlength="255" styleClass="w-100" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.email']}" styleClass="margin-left-label" />
+								<p:inputText id="email" value="#{candidateDialog.candidateEntity.email}" required="true" maxlength="255" styleClass="w-100" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.jobTitle']}" />
+								<p:inputText id="title" value="#{candidateDialog.candidateEntity.jobTitle}" required="true" maxlength="255" styleClass="w-100" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.status']} " styleClass="margin-left-label" />
+								<p:selectOneMenu id="status" value="#{candidateDialog.selectedStatus}" autoWidth="false" styleClass="recruiting-select-one">
+									<f:selectItems value="#{candidateDialog.statusListAsSelectItem}" var="s" itemLabel="#{s.label}" itemValue="#{s.value}" />
+								</p:selectOneMenu>
+
+								<p:outputLabel for="recommended-by" value="#{RecruitingMsg['candidateDialog.recommended']}" />
+								<dc:autoCompleteUser id="recommended-by" userValue="#{candidateDialog.recommendedBy}" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.classification']}" styleClass="margin-left-label" />
+								<p:selectOneMenu id="classification" value="#{candidateDialog.selectedClassification}" autoWidth="false" styleClass="recruiting-select-one">
+									<f:selectItem itemLabel="#{CoreMsg['NotSpecified']}" itemValue="" />
+									<f:selectItems value="#{candidateDialog.classificationsList}" var="c" itemLabel="#{c.name}" itemValue="#{c}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+						</div>
+
+						<p:outputLabel for="description" value="#{RecruitingMsg['vacancyDialog.remarks']}" style="margin-top:0.5em;" />
+						<p:textEditor id="description" styleClass="recruiting-vacancy-texteditor" value="#{candidateDialog.candidateEntity.remarks}" style="margin-top:0.5em;" />
+					</p:tab>
+
+					<p:tab title="#{RecruitingMsg['candidateDialog.personal']}">
+						<h:panelGrid columns="2" style="margin-top:1em;">
+							<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.anonymous']}" style="Vertical-align: center" />
+							<p:toggleSwitch id="anony" value="#{candidateDialog.candidateEntity.restricted}" />
+						</h:panelGrid>
+
+						<p:fieldset legend="#{RecruitingMsg['candidateDialog.personal']}" style="margin-top:1em;">
+							<h:panelGrid columns="4" cellpadding="2" cellspacing="2" columnClasses="w-12, w-38, w-12, w-38" width="100%" styleClass="recruiting-grid">
+								<p:outputLabel for="@next" value="#{CoreMsg['gender']} " />
+								<p:selectOneMenu id="gender" value="#{candidateDialog.gender}" autoWidth="false" styleClass="recruiting-select-one">
+									<f:selectItems value="#{candidateDialog.genders}" />
+								</p:selectOneMenu>
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.phone']}" styleClass="margin-left-label" />
+								<p:inputText id="phone" value="#{candidateDialog.candidateEntity.phone}" maxlength="255" styleClass="w-100 margin-left-label" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.dateOfBirth']}" />
+								<p:datePicker id="dateOfBirth" value="#{candidateDialog.candidateEntity.dateOfBirth}" required="false" locale="#{operatorSession.locale}"
+									pattern="#{operatorSession.datePattern}" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.citizenship']}" styleClass="margin-left-label" />
+								<p:selectOneMenu id="citizenship" value="#{candidateDialog.candidateEntity.citizenship}" autoWidth="false" styleClass="recruiting-select-one">
+									<f:selectItems value="#{candidateDialog.availableCountries}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="#{RecruitingMsg['candidateDialog.address']}" style="margin-top:1em;">
+							<h:panelGrid columns="4" cellpadding="2" cellspacing="2" columnClasses="w-12, w-38, w-12, w-38" width="100%" styleClass="recruiting-grid">
+								<p:outputLabel for="@next" value="#{AdminMsg['branchLocationDialog.streetNrStreet']}" />
+								<p:inputText id="address" value="#{candidateDialog.candidateEntity.address}" maxlength="255" styleClass="w-100" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.zipCodeCity']}" styleClass="margin-left-label" />
+								<h:panelGroup>
+									<p:inputText id="zipCode" value="#{candidateDialog.candidateEntity.zipCode}" maxlength="15" styleClass="recruiting-zip" />
+									<h:outputText value=" - " />
+									<p:inputText id="city" value="#{candidateDialog.candidateEntity.city}" maxlength="255" styleClass="recruiting-city" />
+								</h:panelGroup>
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.countryState']}" />
+								<p:inputText id="countryState" value="#{candidateDialog.candidateEntity.countryState}" maxlength="255" styleClass="w-100" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.country']}" styleClass="margin-left-label" />
+								<p:selectOneMenu id="country" value="#{candidateDialog.candidateEntity.country}" autoWidth="false" styleClass="recruiting-select-one">
+									<f:selectItems value="#{candidateDialog.availableCountries}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+						</p:fieldset>
+						<p:fieldset legend="#{RecruitingMsg['candidateDialog.qualification']}" style="margin-top:1em;">
+							<h:panelGrid columns="4" cellpadding="2" cellspacing="2" columnClasses="w-12, w-38, w-12, w-38" width="100%" styleClass="recruiting-grid">
+								<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.schoolGraduation']}" />
+								<p:inputText id="schoolGraduation" value="#{candidateDialog.candidateEntity.schoolGraduation}" maxlength="255" styleClass="w-100" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.professionalQualification']}" styleClass="margin-left-label" />
+								<p:inputText id="professionalQualification" value="#{candidateDialog.candidateEntity.professionalQualification}" maxlength="255" styleClass="w-100" />
+
+								<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.experience']}" />
+								<p:inputText id="experience" value="#{candidateDialog.candidateEntity.experience}" styleClass="w-100" maxlength="255" />
+							</h:panelGrid>
+						</p:fieldset>
+
+						<p:fieldset legend="#{RecruitingMsg['candidateDialog.miscellaneous']}" style="margin-top:1em;">
+							<h:panelGrid columns="2" columnClasses="w-30, w-70" width="100%" styleClass="recruiting-grid">
+								<h:panelGrid columns="2" cellpadding="2" cellspacing="2" columnClasses="w-30, w-70" width="100%" styleClass="recruiting-grid">
+									<p:outputLabel for="@next" value="#{RecruitingMsg['vacancyDialog.starting']}" />
+									<p:datePicker id="starting" value="#{candidateDialog.candidateEntity.startingOn}" locale="#{operatorSession.locale}"
+										pattern="#{operatorSession.datePattern}" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" />
+
+									<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.periodOfNotice']}" />
+									<p:inputText id="periodOfNotice" value="#{candidateDialog.candidateEntity.periodOfNotice}" styleClass="w-100" maxlength="255" />
+
+									<p:outputLabel for="salaryTarget" value="#{RecruitingMsg['candidateDialog.salaryRequest']}" />
+									<h:panelGroup>
+										<p:inputNumber id="salaryTarget" value="#{candidateDialog.candidateEntity.salaryRequest}" minValue="0" maxValue="2147483647" inputStyle="width: 7em" />
+										<p:selectOneMenu id="currency" filter="true" filterMatchMode="contains" value="#{candidateDialog.currency}"
+											style="margin-left: 1em;min-width: 8em;max-width: 8em;">
+											<f:selectItems value="#{candidateDialog.availableCurrencies}" />
+										</p:selectOneMenu>
+									</h:panelGroup>
+								</h:panelGrid>
+
+								<h:panelGrid columns="2" cellpadding="2" cellspacing="2" width="100%" columnClasses="w-30, w-70" styleClass="recruiting-grid">
+									<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.recruiter']}" style="margin-left: 3em" />
+									<p:selectOneMenu id="recuiters" value="#{candidateDialog.recruiterName}" autoWidth="false" styleClass="recruiting-select-one">
+										<f:selectItem itemLabel="#{CoreMsg['NotSpecified']}" itemValue="" />
+										<f:selectItems value="#{candidateDialog.recruitersList}" />
+									</p:selectOneMenu>
+
+									<p:outputLabel for="@next" value="#{RecruitingMsg['candidateDialog.referral']}" style="margin-left: 3em" />
+									<p:inputTextarea id="referral" value="#{candidateDialog.candidateEntity.referral}" styleClass="w-100" maxlength="255" />
+								</h:panelGrid>
+							</h:panelGrid>
+						</p:fieldset>
+					</p:tab>
+
+					<p:tab title="#{RecruitingMsg['candidateDialog.relevantVacancies']}" id="vacancyTab">
+						<p:commandLink immediate="true" action="#{candidateDialog.actionPreAddVacancy()}" oncomplete="PF('vacancyDialog').show();"
+							update="vacancyDialogForm:updateVacancy" style="margin-top:1em">
+							<h:outputText class="fa fa-plus" />
+							<h:outputText style="margin-left:0.2em" value="#{RecruitingMsg['vacancyDialog.add']}" />
+						</p:commandLink>
+
+						<p:dataTable id="vacancyTable" var="vacancy" value="#{candidateDialog.relevantVacancies}" rowKey="#{vacancy.id}" emptyMessage="#{CoreMsg['emptyTable']}"
+							style="margin-top:1em">
+
+							<p:column width="10%" filterBy="#{vacancy.id}" headerText="#{RecruitingMsg['vacancyDialog.vacancyNo']}" filterMatchMode="contains" sortBy="#{vacancy.id}">
+								<h:outputText value="#{vacancy.id}" />
+							</p:column>
+
+							<p:column filterBy="#{vacancy.defaultTitle}" headerText="#{RecruitingMsg['Vacancy.title']}" filterMatchMode="contains" sortBy="#{vacancy.defaultTitle}">
+								<h:outputText value="#{vacancy.defaultTitle}" />
+							</p:column>
+
+							<p:column style="text-align:center; width:37px">
+								<p:commandButton id="removeVacancy" icon="fa fa-trash-can" ajax="true" action="#{candidateDialog.removeVacancy(vacancy)}" partialSubmit="true"
+									process="@this" update="vacancyTable" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+
+					<p:tab title="#{RecruitingMsg['vacancyDialog.skills']}">
+						<ui:include src="/mgt/modules/skills/SkillTree.xhtml">
+							<ui:param name="skillTableId" value="requiredSkillTable" />
+							<ui:param name="hidePriority" value="#{true}" />
+						</ui:include>
+						<p:spacer />
+					</p:tab>
+
+					<p:tab title="#{RecruitingMsg['watchers']}" id="watchersTab">
+						<p:commandLink immediate="true" action="#{candidateDialog.actionPreAddWatcher()}" oncomplete="PF('watcherDialog').show();" style="margin-top:1em">
+							<h:outputText class="fa fa-plus" />
+							<h:outputText style="margin-left:0.2em" value="#{RecruitingMsg['vacancyDialog.add']}" />
+						</p:commandLink>
+
+						<p:dataTable id="watchersTable" var="watcher" value="#{candidateDialog.watchers}" rowKey="#{watcher.id}" emptyMessage="#{CoreMsg['emptyTable']}"
+							style="margin-top:1em">
+
+							<p:column style="text-align:center; width:37px">
+								<p:avatar shape="circle">
+									<p:graphicImage value="#{candidateDialog.getUserPhoto(watcher)}" stream="false" />
+								</p:avatar>
+							</p:column>
+
+							<p:column filterBy="#{watcher.displayName}" headerText="#{RecruitingMsg['watchers.watcher']}" filterMatchMode="contains" sortBy="#{watcher.displayName}">
+								<h:outputText value="#{watcher.displayName}" />
+							</p:column>
+
+							<p:column filterBy="#{watcher.jobTitle}" headerText="#{RecruitingMsg['watchers.jobTitle']}" filterMatchMode="contains">
+								<h:outputText value="#{watcher.jobTitle}" />
+							</p:column>
+
+							<p:column filterBy="#{watcher.departmentName}" headerText="#{RecruitingMsg['watchers.department']}" filterMatchMode="contains">
+								<h:outputText value="#{watcher.departmentName}" />
+							</p:column>
+
+							<p:column filterBy="#{watcher.email}" headerText="#{RecruitingMsg['watchers.email']}" filterMatchMode="contains">
+								<h:outputText value="#{watcher.email}" />
+							</p:column>
+
+							<p:column style="text-align:center; width:37px">
+								<p:commandButton id="removeWatcher" icon="fa fa-trash-can" ajax="true" action="#{candidateDialog.removeWatcher(watcher)}" partialSubmit="true"
+									process="@this" update="watchersTable" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+
+					<p:tab title="#{RecruitingMsg['candidateDialog.files']}" id="filesTab">
+						<h:panelGroup id="download-group" style="margin-top: 1em">
+							<p:fileUpload id="upload-button" listener="#{candidateDialog.handleFileUpload}" mode="advanced" dragDropSupport="false" multiple="false"
+								sizeLimit="50000000" update="fileTable" auto="true" invalidSizeMessage="#{RecruitingMsg['candidateDialog.error.fileTooLarge']}"
+								label="#{RecruitingMsg['candidateDialog.upload']}" />
+							<p:tooltip for="upload-button" value="#{RecruitingMsg['candidateDialog.uploadFormat']}" position="top" />
+							<p:commandButton id="actionDownloadSingleFile" icon="fa fa-cloud-download" value="#{DcupMsg['button.download']}" immediate="true"
+								rendered="#{candidateDialog.multipleFiles == false}" actionListener="#{candidateDialog.actionDownloadSingleFile}">
+								<p:fileDownload value="#{candidateDialog.downloadFile}" />
+							</p:commandButton>
+							<p:commandButton id="actionDownloadMultiFile" icon="fa fa-cloud-download" value="#{DcupMsg['button.download']}" ajax="false" immediate="true"
+								action="#{candidateDialog.actionDownloadMultipleFilesOrFolders()}" rendered="#{candidateDialog.multipleFiles == true}">
+							</p:commandButton>
+							<p:spacer width="20" />
+							<p:commandButton id="removeFile" icon="fa fa-trash-can" value="#{DcupMsg['button.delete']}" action="#{candidateDialog.removeFile()}" update="fileTable"
+								styleClass="stylebutton" immediate="true">
+							</p:commandButton>
+							<p:spacer width="20" />
+							<p:commandButton id="edit-file-info" icon="fa fa-pen" value="#{RecruitingMsg['file.editComment']}"
+								action="#{candidateDialog.actionPrepareFileInfoEdit()}" update="addInfoForm:addInfoDialog" immediate="true" process="@this" partialSubmit="true">
+							</p:commandButton>
+							<p:spacer width="20" />
+							<p:commandButton id="preview-file" icon="fa fa-eye" value="#{RecruitingMsg['file.preview']}" action="#{candidateDialog.actionPrepareFilePreview()}"
+								update="previewFileForm:previewFileDialog" immediate="true" process="@this" partialSubmit="true">
+							</p:commandButton>
+						</h:panelGroup>
+
+						<p:dataTable id="fileTable" var="file" value="#{candidateDialog.files}" selection="#{candidateDialog.selectedFiles}" rowKey="#{file.name}"
+							emptyMessage="#{CoreMsg['emptyTable']}" style="margin-top:1em">
+							<p:ajax event="rowSelectCheckbox" partialSubmit="true" process="@this" update="tabform:tabs:download-group"
+								listener="#{candidateDialog.setMultipleFiles()}" />
+							<p:ajax event="rowUnselectCheckbox" partialSubmit="true" process="@this" update="tabform:tabs:download-group"
+								listener="#{candidateDialog.setMultipleFiles()}" />
+							<p:ajax event="toggleSelect" partialSubmit="true" process="@this" update="tabform:tabs:download-group" listener="#{candidateDialog.setMultipleFiles()}" />
+							<p:ajax event="rowSelect" partialSubmit="true" process="@this" update="tabform:tabs:download-group" listener="#{candidateDialog.setMultipleFiles()}" />
+							<p:ajax event="rowUnselect" partialSubmit="true" process="@this" update="tabform:tabs:download-group" listener="#{candidateDialog.setMultipleFiles()}" />
+
+							<p:column selectionMode="multiple" style="width:20px; text-align:center" />
+
+							<p:column headerText="#{RecruitingMsg['candidateDialog.status']}">
+								<h:outputText value="#{candidateDialog.toUploadFile(file)}" />
+							</p:column>
+
+							<p:column filterBy="#{file.name}" headerText="#{RecruitingMsg['candidateDialog.fileName']}" filterMatchMode="contains" sortBy="#{file.name}">
+								<h:outputText value="#{file.name}" />
+							</p:column>
+
+							<p:column filterBy="#{file.info}" headerText="#{RecruitingMsg['file.comment']}" filterMatchMode="contains" sortBy="#{file.info}">
+								<h:outputText value="#{file.info}" />
+							</p:column>
+
+							<p:column headerText="#{RecruitingMsg['candidateDialog.length']}">
+								<h:outputText value="#{file.lengthKb} KB" />
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+				</p:tabView>
+			</div>
+			<p:commandButton value="Ok" update="@form" styleClass="dialog-button" icon="pi pi-check" action="#{autoDialog.actionOk}" />
+			<p:spacer width="20" />
+			<p:commandButton id="closeDialog" value="#{CoreMsg['cancel']}" icon="fa fa-close" styleClass="dialog-button" immediate="true"
+				action="#{viewNavigator.actionCloseDialog}" />
+		</h:form>
+
+
+		<h:form id="vacancyDialogForm">
+			<p:dialog header="#{RecruitingMsg['candidateDialog.relevantVacancies']}" id="vacancyDialog" widgetVar="vacancyDialog" modal="true" resizable="false">
+				<p:dataTable id="updateVacancy" value="#{candidateDialog.availableVacancies}" var="vacancy" selection="#{candidateDialog.selectedVacancies}"
+					rowKey="#{vacancy.id}" styleClass="table-sticky-head" emptyMessage="#{CoreMsg['emptyTable']}" selectionPageOnly="false">
+
+					<p:column selectionMode="multiple" style="width:20px; text-align:center" />
+
+					<p:column width="10%" headerText="#{RecruitingMsg['vacancyDialog.vacancyNo']}" filterBy="#{vacancy.id}" filterMatchMode="contains" sortBy="#{vacancy.id}">
+						<h:outputLabel value=" #{vacancy.id}" />
+					</p:column>
+
+					<p:column headerText="#{RecruitingMsg['Vacancy.title']}" filterBy="#{vacancy.defaultTitle}" filterMatchMode="contains" sortBy="#{vacancy.defaultTitle}">
+						<h:outputLabel value="#{vacancy.defaultTitle}" />
+					</p:column>
+				</p:dataTable>
+
+				<p:commandButton value="#{RecruitingMsg['candidateDialog.update']}" action="#{candidateDialog.actionUpdateVacancies()}"
+					update="tabform:tabs:vacancyTable, updateVacancy" styleClass="dialog-button" icon="pi pi-check" oncomplete="PF('vacancyDialog').hide();" />
+				<p:spacer width="20" />
+				<p:commandButton value="#{CoreMsg['close']}" icon="fa fa-close" styleClass="dialog-button" style="margin-bottom: 2em" immediate="true"
+					onclick="PF('vacancyDialog').hide();" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="watcherDialogForm">
+			<p:dialog widgetVar="watcherDialog" modal="true" header="#{RecruitingMsg['watchers.addWatcher']}" dynamic="true" cache="false" resizable="false">
+				<h:panelGrid id="new-watcher-grid" columns="3" cellpadding="4">
+					<p:outputLabel for="autoUser" value="#{RecruitingMsg['watchers.watcher']} *" />
+
+					<p:avatar id="new-watcher-photo" dynamicColor="true" size="large" shape="circle" style="margin-left: 0.4em;">
+						<p:graphicImage value="#{candidateDialog.getUserPhoto(candidateDialog.newWatcher)}" stream="false" />
+					</p:avatar>
+
+					<dc:autoCompleteUser id="autoUser" userValue="#{candidateDialog.newWatcher}" required="true" userListener="#{candidateDialog.listenWatcher()}"
+						updateComponents="watcherDialogForm:new-watcher-grid" />
+				</h:panelGrid>
+
+				<p:commandButton value="#{RecruitingMsg['vacancyDialog.add']}" update="tabform:tabs:watchersTable" styleClass="dialog-button" icon="pi pi-check"
+					action="#{candidateDialog.actionAddWatcher}" />
+				<p:spacer width="20" />
+				<p:commandButton value="#{CoreMsg['close']}" icon="fa fa-close" styleClass="dialog-button" style="margin-bottom: 2em" immediate="true"
+					onclick="PF('watcherDialog').hide();" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="addInfoForm">
+			<p:dialog widgetVar="addInfoDialogVar" modal="true" id="addInfoDialog">
+				<f:facet name="header">
+					<h:outputText style="margin-right: 0.3em;" class="fa fa-pen" />
+					<h:outputText value="#{RecruitingMsg['file.editComment']}" />
+				</f:facet>
+
+				<p:outputLabel for="@next" value="#{RecruitingMsg['file.comment']}" />
+				<p:inputText id="file-info-input" value="#{candidateDialog.fileInfo}" maxlength="255" size="55" style="margin-left: 1em;" />
+
+				<br />
+
+				<p:commandButton id="action-save-info" value="#{CoreMsg['ok']}" ajax="true" icon="pi pi-check" action="#{candidateDialog.actionUpdateInfo}"
+					update="tabform:tabs:fileTable" style="margin:3rem 1rem 1rem 1rem; width:8em" />
+				<p:commandButton id="action-cancle-info" value="#{CoreMsg['close']}" icon="fa fa-close" immediate="true" onclick="PF('addInfoDialogVar').hide();"
+					style="width: 8em" />
+			</p:dialog>
+		</h:form>
+
+		<h:form id="previewFileForm">
+			<p:dialog position="top" widgetVar="previewFileDialogVar" modal="true" id="previewFileDialog" styleClass="recruiting-preview-dialog">
+				<f:facet name="header">
+					<h:outputText style="margin-right: 0.3em;" class="fa fa-eye" />
+					<h:outputText value="#{RecruitingMsg['file.preview']}" />
+				</f:facet>
+
+				<div class="recruiting-preview-content">
+					<p:media id="media-test" player="pdf" cache="false" value="#{candidateDialog.filePreview}" rendered="#{candidateDialog.pdfFile and candidateDialog.filePreview != null}"
+						styleClass="full-screen-pdf">
+						#{RecruitingMsg['error.browserCannotDisplayPdf']}
+    				</p:media>
+
+					<p:graphicImage value="#{candidateDialog.filePreview}" rendered="#{candidateDialog.pdfFile == false and candidateDialog.filePreview != null}" styleClass="full-screen-image" stream="true"
+						cache="false" />
+				</div>
+				<p:commandButton id="action-cancle-info" value="#{CoreMsg['close']}" icon="fa fa-close" immediate="true" onclick="PF('previewFileDialogVar').hide();"
+					style="width: 8em; margin: 1em 0em;" />
+			</p:dialog>
+		</h:form>
+
+	</h:body>
+</f:view>
+</html>

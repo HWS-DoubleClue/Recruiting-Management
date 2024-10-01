@@ -1,0 +1,260 @@
+<html>
+
+<style>
+	@page {
+		size: A4 portrait;
+		margin: 12mm;
+		box-sizing: content-box;
+		font-family: "Segoe UI", sans-serif;
+		font-size: 10pt;
+		line-height: 1.12em;
+		
+		@bottom-left {
+    		content: element(footer-data);
+  		}
+	}
+
+	html, body {
+		box-sizing: content-box;
+		font-family: "Segoe UI", sans-serif;
+		font-size: 10pt;
+        line-height: 1.6rem;
+		width: 98%;
+		height: 842px;
+        position: absolute;
+        top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		background-color: white;
+	}
+
+	header {
+		font-weight: bold;
+		background-color: #eaeaea;
+		width: 100%;
+		margin: 1rem 0;
+		height: 16%;
+		position: absolute;
+		top: 0;
+	}
+	
+	.frame {
+		width: 18%;
+		height: 120%;
+		position: absolute;
+		top: -10%;
+	    background-size: contain;
+	    background-repeat: no-repeat;
+	    background-position: center;
+	}
+	
+	.nameheading {
+		width: 50%; 
+		padding: 0 0.5rem; 
+		font-size: x-large; 
+		font-weight: bold;
+		float: left; 
+		line-height: 2rem;
+		position: absolute;
+		top: 0;
+		left: 20%;
+	}
+	
+	.statustable {
+		font-size: small;
+		font-weight: normal;
+		margin: 1.5rem 2rem;
+		float: right;
+		width: 22%;
+	}
+	
+	table {
+		border: none;
+        border-spacing: 0;
+		table-layout: fixed;
+		width: 100%;
+		margin-left: 1rem;
+	}
+	
+	.innercontainer {
+		margin: 0.5rem 1.5rem 0.5rem 1rem;
+		float: left; 
+		width: 45%;
+	}
+	
+	.heading {
+		width: 100%; 
+		background-color: #eaeaea;
+		padding: 0.5rem;
+	}
+	
+	.footer {		
+		font-style: italic; 
+		position: absolute; 
+		bottom: 0;
+		left: 0;
+		width: 100%;
+	}
+	
+	.pagefooter {
+		position: running(footer-data);
+	}
+</style>
+
+<body>
+	<header>
+		<div class="frame" style="background-image: url('data:image/*;base64,${getPhotoData()}')"></div>
+		<h2 class="nameheading">
+			${getFormattedFullName()!?trim} 
+			<br>
+			<small style="font-style: italic; font-size: large;">&emsp; ${jobTitle!'Applicant'}</small>
+		</h2>
+
+		<table class="statustable">
+            <tr style="font-weight:bold;">
+            	<td style="text-align: right;">Rating: ${ranking} / 5</td>                      
+            </tr>
+			<tr>
+				<td style="text-align: right;">${getFormattedStatus('de')!'No Status'}</td>
+			</tr>
+			<tr>
+				<td style="text-align: right;">${classifaction!'Unclassified'}</td>
+			</tr>
+		</table>
+	</header>
+	
+	<div style="width: 100%; position: absolute; top: 10%;">
+		<div style="width: 100%; float: left;">
+			<div style="width: 96.5%; margin: 0.5rem 1rem; margin-top: 6rem;">
+				<h4 class="heading">Applied For:</h4>
+				<div style="padding: 0 1rem 1rem 2.5rem;">
+					<#foreach vacancy in vacancies>					
+						<li># ${vacancy.id} - ${vacancy.defaultTitle}</li>					
+					</#foreach>
+				</div>
+			</div>
+		</div>
+	    <div style="width: 100%; float: left;">
+		    <div style="width: 96.5%; margin: 0.5rem 1rem; margin-top: 3em;">
+		       <h4 class="heading">Personal Data:</h4>
+		    </div>
+		</div>
+		<div class="innercontainer">
+			<table>
+				<tr style="font-weight:bold;">
+					<td >E-mail:</td>
+					<td>${getFormattedEmail()}</td>
+				</tr>
+				<tr style="font-weight:bold;">
+					<td>Phone:</td>
+					<td>${getFormattedPhone()!'Not Disclosed'}</td>
+				</tr>
+				<tr>
+					<td>&emsp;</td>
+					<td>&emsp;</td>
+				</tr>
+				<tr>
+					<td>Date of Birth:</td>
+					<td>${getFormattedDateOfBirth('en')!'Not Disclosed'}</td>
+				</tr>
+				<tr>
+					<td>Gender:</td>
+					<td>${getFormattedGender('en')}</td>
+				</tr>
+				<tr>
+					<td>Citizenship:</td>
+					<td>${getFormattedCitizenship('en')!'Not Disclosed'}</td>
+				</tr>
+				<tr>
+					<td>Street:</td>
+					<td>${getFormattedAdress()!'Not Disclosed'}</td>
+				</tr>
+				<tr>
+					<td>Zip Code & City:</td>
+					<td>${getFormattedZipAndCity()!'Not Disclosed'}</td>
+				</tr>
+				<tr>
+					<td>County / State:</td>
+					<td>${getFormattedCountryState()!'Not Disclosed'}</td>
+				</tr>
+				<tr>
+					<td>Country:</td>
+					<td>${getFormattedCountry('en')!'Not Disclosed'}</td>
+				</tr>
+			</table>
+		</div>		
+		<div class="innercontainer">
+			<table>
+				<tr>
+					<td>Professional Qualification:</td>
+					<td>${professionalQualification!'Not Disclosed'}</td>
+				</tr>
+				<tr>
+					<td>Education Level:</td>
+					<td>${schoolGraduation!'Not Disclosed'}</td>
+				</tr>
+				<tr>
+					<td>Experience:</td>
+					<td>${experience!'Not Disclosed'}</td>
+				</tr>
+				<tr>
+					<td>Starting from:</td>
+					<td>${getFormattedStartingOn('en')!'Not Disclosed'}</td>
+				</tr>
+				<tr>
+				    <td>Period of Notice: </td>
+				    <td>${periodOfNotice!'Not Disclosed'}</td>
+				</tr>
+				<tr>
+					<td>Salary Request:</td>
+					<td>${getFormattedSalary('en')!'Not Disclosed'}</td>
+				</tr>
+				<tr>
+					<td>Recruiter:</td>
+					<td>${recruiter!'Not Disclosed'}</td>
+				</tr>
+				<tr>
+					<td>Recommended by: </td>
+					<td>${recommendedBy!'Not Disclosed'}</td>
+				</tr>
+			</table>
+		</div>
+		<#if skills?has_content>
+		<div style="width: 100%; float: left; margin-bottom: 3em;">
+			<div style="width: 96.5%; margin: 0.5rem 1rem;">
+				<h4 class="heading">Skills:</h4>
+				<div style="padding: 0 1rem 1rem 2.5rem;">
+					<#foreach skill in skills>
+						<div style="float: left; width: 48%;">
+							<div style="float: left; width: 50%;"><li>${skill.skill.name}</li></div>
+							<div style="float: left; width: 50%;">${skill.level?capitalize}</div>
+						</div>
+					</#foreach>
+				</div>
+			</div>
+		</div>
+		</#if>
+		<div style="width: 100%; float: left; margin-bottom: 3em;">
+			<div style="width: 96.5%; margin: 0.5rem 1rem;">
+				<#if getFormattedRemarks()?has_content>
+					<h4 class="heading">Remarks:</h4>
+					<div style="padding: 0 1rem 1rem 2.5rem;">
+						<td>${getFormattedRemarks()!}</td>
+					</div>
+				</#if>
+				<#if referral?has_content>
+					<h4 class="heading">How has the candidate learned about us:</h4>
+					<div style="padding: 0 1rem 1rem 2.5rem;">
+						<td>${referral}</td>
+					</div>
+				</#if>
+			</div>
+		</div>
+		<div class="footer pagefooter">
+			<small>Last Changed: ${getLastModifiedOnFormatted('en')} by ${modifiedBy.displayName!'Administration'}.</small>
+		</div>
+	</div>
+	
+</body>
+</html>
