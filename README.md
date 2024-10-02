@@ -1,40 +1,65 @@
 # Recruiting
 
-Recruiting is a webtool to track recruiting processes and manage vacancies, applicants as well as recruiters your company is working with. HR Managers and Department Heads can register and update open vacancies, define the skills needed for the open position and record administrative information like starting date and budget. Once applications for a vacancy have come in, they are gathered in a central location. Recruiting provides you with all the tools necessary to track the recruiting process of the applicants, rate and quickly compare the candidates for each position.
-Recruiting runs as a Plugin Module in the DoubleClue Enterprise Management (DCEM). You can find the DCEM repository at https://github.com/HWS-DoubleClue/IAM-Password-Manager. It further is dependent on the DoubleClue Skills Module: https://github.com/HWS-DoubleClue/Skills-Management 
-For further details, have a look at the Recruiting Manual.
+Recruiting-Management is an other module for [DoubleClue Enterprise Management Framework] (https://github.com/HWS-DoubleClue/IAM-Password-Manager). 
+It manages:
+	- Vacancies
+	- Candidates
+	- Recruiters  
 
+This module has dependency on an other DCEM Module [Skills](https://github.com/HWS-DoubleClue/Skills-Management) 
+	
 ## Features
 
 ### Vacancies
-Add free vacancies in your company. In a detailed form you can gather and easily update all administrative information regarding the position like the budgeted salary, starting date and decision makers. You can further add a skill profile to define skills required for this position as well as nice-to-have skills which would be beneficial for a candidate to have but are not mandatory. The selection of different vacancy statuses allows to keep track in which step of the job advertisement and recruiting process currently is. It also offers a comprehensive view of all candidates which have applied to a position including the rating they have received so far.
+Human-resources department, team leads and head of departments may create and manage company vacancies. 
+A vacancy has a lot of information, such as:
+ - Title and Description (in different Langaugess)
+ - Department (can be imported from AD or Azure AD)
+ - Status (free configurable statuses)
+ - Skills required
+ - Skills nice to have
+ - Watchers
+ - others items such as, budgeted salary, decision makrers, location, start date, hours/week etc..
 
 ### Candidates
-Register your applicants as candidates and match them with different vacancies. You can gather all information about the applicant, including their skills, availability, and salary, in one central location and even upload documents like CVs and cover letters. For your convenience, all those information can be exported as a PDF. You can further define various statuses for candidates, to 
+Candidates may be added manually by HR or through REST-API from a Web-Portal.
+Candidates can apply to one or more Vacancies.
+A candidate may have a lot if information, such as:
+ - personal details including photo
+ - status
+ - skills
+ - availability
+ - request salar
+ - several uploaded documents
+ - others
+ 
+#### Candidate Feedback
+Teamleads and wathers can give feedback ratings to candidates. 
 
-### Candidate Feedback
-Recuriting offers a rating feature, in which decision makers involved in the hiring process can share their opinions on a candidate. It also offers a comprehensive view in which all candidates who have applied for a position and their ratings are shown together.
+### Adaptive Access Rights 
+
+HR personell may be give granular access rights to all entities. 
+Teamleads or head of departments will may create new vacancies for their department respectivily, but are not allowed to publish or confirm the vacancies if not explicitily have access to do.
+Also Teamleads and head of departments may always view and give feedback to candidates which applies for their vacanciey. 
+
 
 ### Recruiters
-If you cooperate with headhunters and recruiters to fill your open positions, you can add those in their separate section of Recruiting. After registering a recruiter, you can add additional information on your cooperation and even upload documents. If an applicant has been forwarded by a recruiter, you can select this recruiter in their profile.
+
+If you engage recruiters (headhunters) to find candidates for your vacancies, this module will also mange your recruites. If an applicant has been forwarded by a recruiter, you can select this recruiter in their profile.
 
 ### Automatic E-Mail Notifications
-To track updates to a vacancy or candidate, users can be added as watchers and will then receive an e-mail notification each time a vacancy or candidate is updated. Department heads are watchers by default.
+To track updates to a vacancy or candidate, users can be added as watchers and will then receive an e-mail notification each time a vacancy or candidate is updated. Head of departments are watchers by default.
 
-## [Try it out for free](https://doubleclue.online/dcem/createTenant/index.xhtml)
-On Premises or in the Cloud
-You can install the solution in a DCEM on premises or as a "Software As A Service" in our DoubleClue cloud.
-Build
-You can download the latest release version of the Skills module from GitHub.
-If you prefer to build a snapshot version yourself, follow these steps:
-•	Check out DCEM at https://github.com/HWS-DoubleClue/IAM-Password-Manager
-•	Check out the Skills module
-•	Check out the Recruiting module
-•	Build DCEM in an IDE of your choice
-•	Execute Maven with clean package
-•	The output is a jar file in the target folder
+## Try it out
 
-### Install on Premises
-The installation of the Skills-Module is quick and easy. Simply copy the SkillsModule.jar to the subfolder "plugins" in your DCEM folder and restart DCEM. You would also need to acquire a license key from the Doubleclue support.
-•	Contact: support@doubleclue.com
-For more information, check our detailed instruction at https://github.com/HWS-DoubleClue/IAM-Password-Manager/blob/master/Documents/InstallPluginModule.odt or have a look at the the [DoubleClue Manual](https://doubleclue.com/wp-content/uploads/DCEM_Manual_EN.pdf) Chapter 20: DoubleClue Plugin Modules.
+### In the Cloud
+
+Create a tenant in the DoubleClue Cloud and start using Recruiting-Management in seconds.
+ 
+Go to: [DoubleClue Cloud] (https://doubleclue.online/dcem/createTenant/index.xhtml)
+
+### On Premisis
+
+Building and installing DoubleClue-Enterprise-Management with plugin-modules requires very good skills in JavaEE, Eclipse, maven, yajsw and other frameworks. 
+For this reason we recommand you to contact support@doubleclue.com for further 
+
