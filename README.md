@@ -1,6 +1,7 @@
 # Recruiting Management Module
 
-Recruiting-Management is an other module for DoubleClue Enterprise Management (DCEM) Framework. https://github.com/HWS-DoubleClue/IAM-Password-Manager
+Recruiting-Management is an other module for DoubleClue Enterprise Management (DCEM) Framework.
+https://github.com/HWS-DoubleClue/IAM-Password-Manager
 
 It manages:
 - Vacancies
@@ -11,7 +12,7 @@ This module has dependency on an other DCEM Module [Skills](https://github.com/H
 
 The modules use all features of the DCEM framework, such as security, Multi-Factor Autentication (MFA), Access-Rights and many other features. 
 
-** Give it a try at: https://doubleclue.online/dcem/createTenant/index.xhtml **
+**Give it a try at: https://doubleclue.online/dcem/createTenant/index.xhtml**
 	
 ## Features
 
