@@ -51,7 +51,7 @@ public class CandidateStatusEntity extends EntityInterface {
 	@Column(name = "dc_rank", nullable = false)
 	int rank;
 
-	@DcemGui(name = "dc_deprecated", filterValue = "false", filterOperator = FilterOperator.IS_FALSE)
+	@DcemGui(filterValue = "false", filterOperator = FilterOperator.IS_FALSE)
 	boolean deprecated;
 
 	public CandidateStatusEntity() {
