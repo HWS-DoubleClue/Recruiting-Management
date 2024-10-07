@@ -1,6 +1,6 @@
 # Recruiting Management Module
 
-Recruiting Management is a module for the DoubleClue Enterprise Management (DCEM) Framework: https://github.com/HWS-DoubleClue/IAM-Password-Manager
+Recruiting Management is a module for the DoubleClue Enterprise Management (DCEM) Framework https://github.com/HWS-DoubleClue/IAM-Password-Manager. 
 
 It manages:
 - Vacancies
@@ -49,7 +49,6 @@ Also, teamleads and head of departments may always view and give feedback to can
 
 
 ### Recruiters
-
 If you cooperate with recruiters (headhunters) to find candidates for your vacancies, this module will also manage your recruiters. If an applicant has been forwarded by a recruiter, you can select this recruiter in their profile.
 
 ### E-Mail Notifications
@@ -65,6 +64,8 @@ Go to: DoubleClue Cloud https://doubleclue.online/dcem/createTenant/index.xhtml
 
 ### On Premisis
 
-Building and installing DoubleClue-Enterprise-Management with plugin modules requires adavnace knowledge in JavaEE, Eclipse, maven, yajsw and other frameworks. 
-For this reason, we recommand you to contact support@doubleclue.com for further information and training.
+Building and installing DoubleClue Enterprise Management with plugin modules requires adavanced experience with JavaEE, Eclipse, maven, yajsw and other frameworks. 
+For this reason, we recommand to contact support@doubleclue.com for further information and training.
+
+For further information check the Recruiting Manual at: https://doubleclue.com/files/DC_Recruiting_Manual_en.pdf
 
