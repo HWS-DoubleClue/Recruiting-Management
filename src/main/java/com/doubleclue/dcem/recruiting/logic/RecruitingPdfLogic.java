@@ -19,14 +19,13 @@ import javax.inject.Named;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.poi.util.IOUtils;
+import org.apache.pdfbox.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.helper.W3CDom;
 import org.jsoup.nodes.Document;
@@ -141,7 +140,7 @@ public class RecruitingPdfLogic {
 		}
 		File mergedFile = File.createTempFile("dcem-", ".pdf");
 		merger.setDestinationFileName(mergedFile.getAbsolutePath());
-		merger.mergeDocuments(MemoryUsageSetting.setupTempFileOnly());
+		merger.mergeDocuments(IOUtils.createTempFileOnlyStreamCache());
 		return mergedFile;
 	}
 
