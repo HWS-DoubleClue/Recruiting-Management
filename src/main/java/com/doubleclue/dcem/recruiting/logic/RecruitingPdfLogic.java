@@ -73,10 +73,9 @@ public class RecruitingPdfLogic {
 	public File exportPdf(String htmlData, String fileName) throws Exception {
 		File tempFile = null;
 		try (FileOutputStream os = new FileOutputStream(tempFile = File.createTempFile("dcem-", "-pdfFile"))) {
-			Document doc = Jsoup.parse(htmlData, fileName);
 			PdfRendererBuilder builder = new PdfRendererBuilder();
 			builder.useFastMode();
-			doc = Jsoup.parse(htmlData);
+			Document doc = Jsoup.parse(htmlData);
 			org.w3c.dom.Document dom = new W3CDom().fromJsoup(doc);
 			builder.withW3cDocument(dom, null);
 			builder.toStream(os);

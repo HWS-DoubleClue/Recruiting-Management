@@ -49,6 +49,7 @@ import com.doubleclue.dcem.core.jersey.SerializerEntities;
 import com.doubleclue.dcem.core.jersey.SerializerEntity;
 import com.doubleclue.dcem.core.jersey.SerializerToString;
 import com.doubleclue.dcem.core.jpa.FilterOperator;
+import com.doubleclue.dcem.core.utils.DcemUtils;
 import com.doubleclue.dcem.core.utils.compare.DcemCompare;
 import com.doubleclue.dcem.recruiting.entities.enums.VacancyPriority;
 import com.doubleclue.dcem.recruiting.entities.enums.VacancyType;
@@ -646,12 +647,12 @@ public class VacancyEntity extends EntityInterface implements Comparable<Vacancy
 
 	@JsonIgnore
 	public String getFormattedApplicationDeadline(String language) {
-		return RecruitingUtils.formatDate(language, applicationDeadline);
+		return DcemUtils.formatDate(language, applicationDeadline);
 	}
 
 	@JsonIgnore
 	public String getFormattedStartingFrom(String language) {
-		return RecruitingUtils.formatDate(language, startingFrom);
+		return DcemUtils.formatDate(language, startingFrom);
 	}
 
 	@JsonIgnore
@@ -666,7 +667,7 @@ public class VacancyEntity extends EntityInterface implements Comparable<Vacancy
 
 	@JsonIgnore
 	public String getLastModifiedOnFormatted(String language) {
-		return RecruitingUtils.formatDateTime(language, lastModifiedOn);
+		return DcemUtils.formatDateTime(language, lastModifiedOn);
 	}
 
 	public List<SkillsLevelEntity> getSkillsRequired() throws Exception {

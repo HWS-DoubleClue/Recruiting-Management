@@ -139,22 +139,7 @@ public class RecruitingUtils {
 		return result;
 	}
 
-	public static String formatDate(String locale, LocalDate date) {
-		return formatDate(new Locale(locale), date);
-	}
-
-	public static String formatDate(Locale locale, LocalDate date) {
-		return Objects.isNull(date) == true ? "" : DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).withLocale(locale).format(date);
-	}
-
-	public static String formatDateTime(String locale, LocalDateTime dateTime) {
-		return formatDateTime(new Locale(locale), dateTime);
-	}
-
-	public static String formatDateTime(Locale locale, LocalDateTime dateTime) {
-		return Objects.isNull(dateTime) == true ? "" : DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(locale).format(dateTime);
-	}
-
+	
 	public static String getLocalizedGender(String locale, GenderEnum gender) {
 		ResourceBundle dcemResourceBundle = JsfUtils.getBundle(DcemConstants.CORE_RESOURCE, new Locale(locale));
 		return JsfUtils.getStringSafely(dcemResourceBundle, gender.name());

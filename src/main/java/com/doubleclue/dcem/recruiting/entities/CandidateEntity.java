@@ -48,6 +48,7 @@ import com.doubleclue.dcem.core.jersey.SerializerEntities;
 import com.doubleclue.dcem.core.jersey.SerializerEntity;
 import com.doubleclue.dcem.core.jpa.VariableType;
 import com.doubleclue.dcem.core.logic.GenderEnum;
+import com.doubleclue.dcem.core.utils.DcemUtils;
 import com.doubleclue.dcem.core.utils.compare.DcemCompare;
 import com.doubleclue.dcem.recruiting.logic.RecruitingUtils;
 import com.doubleclue.dcem.recruiting.restapi.DeserializerClassification;
@@ -680,7 +681,7 @@ public class CandidateEntity extends EntityInterface implements IPhoto, Serializ
 		if (restrictedViewRights && restricted) {
 			return DcemConstants.RESTRICTED_REPLACEMENT;
 		}
-		return RecruitingUtils.formatDate(language, dateOfBirth);
+		return DcemUtils.formatDate(language, dateOfBirth);
 	}
 
 	@JsonIgnore
@@ -736,12 +737,12 @@ public class CandidateEntity extends EntityInterface implements IPhoto, Serializ
 
 	@JsonIgnore
 	public String getFormattedStartingOn(String language) {
-		return RecruitingUtils.formatDate(language, startingOn);
+		return DcemUtils.formatDate(language, startingOn);
 	}
 
 	@JsonIgnore
 	public String getLastModifiedOnFormatted(String language) {
-		return RecruitingUtils.formatDateTime(language, lastModifiedOn);
+		return DcemUtils.formatDateTime(language, lastModifiedOn);
 	}
 
 	@JsonIgnore
