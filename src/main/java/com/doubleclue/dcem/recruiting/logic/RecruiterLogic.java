@@ -72,7 +72,7 @@ public class RecruiterLogic {
 			em.merge(recruiter);
 			em.flush();
 			if (deletedFiles != null && deletedFiles.isEmpty() == false) {
-				List<CloudSafeDto> deletedDbFiles = cloudSafeLogic.deleteCloudSafeFiles(deletedFiles, null, false);
+				List<CloudSafeDto> deletedDbFiles = cloudSafeLogic.deleteFiles(deletedFiles, null);
 				cloudSafeLogic.deleteCloudSafeFilesContent(deletedDbFiles);
 			}
 		}
