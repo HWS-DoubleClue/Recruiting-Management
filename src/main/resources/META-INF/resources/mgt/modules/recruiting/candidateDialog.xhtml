@@ -34,9 +34,10 @@
 						<div style="display: flex; width: 100%; margin-top: 1em">
 							<div style="display: inline-grid; width: fit-content;">
 								<p:graphicImage id="candidatePhoto" styleClass="imageProfileUser" cache="false" value="#{candidateDialog.candidatePhoto}" />
-								<p:fileUpload listener="#{candidateDialog.handlePhotoUpload}" mode="advanced" dragDropSupport="true" sizeLimit="5000000" multiple="false"
-									allowTypes="/(\.|\/)(jpe?g|png)$/" update="candidatePhoto" auto="true" invalidSizeMessage="#{RecruitingMsg['candidateDialog.error.fileTooLarge']}"
+								<p:fileUpload listener="#{candidateDialog.handlePhotoUpload}" mode="advanced" dragDropSupport="true"  multiple="false"
+									 update="candidatePhoto" auto="true" invalidSizeMessage="#{RecruitingMsg['candidateDialog.error.fileTooLarge']}"
 									label="#{RecruitingMsg['candidateDialog.photoUpload']}" styleClass="uploadbutton uploadbuttontext">
+									<p:validateFile sizeLimit="5000000" allowTypes="/(\.|\/)(jpe?g|png)$/" />
 								</p:fileUpload>
 							</div>
 
@@ -246,8 +247,10 @@
 					<p:tab title="#{RecruitingMsg['candidateDialog.files']}" id="filesTab">
 						<h:panelGroup id="download-group" style="margin-top: 1em">
 							<p:fileUpload id="upload-button" listener="#{candidateDialog.handleFileUpload}" mode="advanced" dragDropSupport="false" multiple="false"
-								sizeLimit="50000000" update="fileTable" auto="true" invalidSizeMessage="#{RecruitingMsg['candidateDialog.error.fileTooLarge']}"
-								label="#{RecruitingMsg['candidateDialog.upload']}" />
+								 update="fileTable" auto="true" invalidSizeMessage="#{RecruitingMsg['candidateDialog.error.fileTooLarge']}"
+								label="#{RecruitingMsg['candidateDialog.upload']}" >
+								<p:validateFile sizeLimit="50000000" />
+								</p:fileUpload>
 							<p:tooltip for="upload-button" value="#{RecruitingMsg['candidateDialog.uploadFormat']}" position="top" />
 							<p:commandButton id="actionDownloadSingleFile" icon="fa fa-cloud-download" value="#{DcupMsg['button.download']}" immediate="true"
 								rendered="#{candidateDialog.multipleFiles == false}" actionListener="#{candidateDialog.actionDownloadSingleFile}">

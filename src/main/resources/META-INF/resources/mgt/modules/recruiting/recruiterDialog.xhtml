@@ -80,8 +80,10 @@
 						<p:spacer />
 						<h:panelGroup id="download-group">
 							<p:fileUpload id="upload-button" listener="#{recruiterDialog.handleFileUpload}" mode="advanced" dragDropSupport="false" multiple="false"
-								sizeLimit="50000000" allowTypes="/(\.|\/)(jpe?g|png|pdf)$/" update="fileTable" auto="true"
-								invalidSizeMessage="#{RecruitingMsg['candidateDialog.error.fileTooLarge']}" label="#{RecruitingMsg['candidateDialog.upload']}" />
+								 update="fileTable" auto="true"
+								invalidSizeMessage="#{RecruitingMsg['candidateDialog.error.fileTooLarge']}" label="#{RecruitingMsg['candidateDialog.upload']}" >
+								<p:validateFile sizeLimit="50000000" allowTypes="/(\.|\/)(jpe?g|png|pdf)$/" fileLimit="1" />
+								</p:fileUpload>
 							<p:tooltip for="upload-button" value="#{RecruitingMsg['candidateDialog.uploadFormat']}" position="top" />
 							<p:commandButton id="actionDownloadSingleFile" icon="fa fa-cloud-download" value="#{DcupMsg['button.download']}" immediate="true"
 								rendered="#{recruiterDialog.multipleFiles == false}" actionListener="#{recruiterDialog.actionDownloadSingleFile}">
