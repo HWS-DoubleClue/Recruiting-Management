@@ -501,7 +501,7 @@ public class CandidateDialog extends DcemDialog implements Serializable, OnCellE
 		}
 
 		CloudSafeEntity cloudSafeEntity = new CloudSafeEntity(CloudSafeOwner.GLOBAL, (DcemUser) null, (DeviceEntity) null, fileName, (LocalDateTime) null,
-				CloudSafeOptions.ENC.name(), false, cloudSafeRoot, operatorSessionBean.getDcemUser());
+				CloudSafeOptions.ENC.name(), false, cloudSafeRoot);
 		cloudSafeEntity.setLength(event.getFile().getSize());
 		displayFiles.add(cloudSafeEntity);
 	}
